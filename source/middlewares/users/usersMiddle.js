@@ -1,7 +1,34 @@
 const Response = require('../../../classes/response');
+const {getEmail} = require('../../../model/users');
 
 
-/*const validatePk = (req, res, next){
+const validatePk = (req, res, next) => {
+    let rta;
+    let data;
+
+    const { email } = req.body;
+
+    getEmail(email).then( function (response){
+        //console.log('response: ' + JSON.stringify(response));
+        if(response[0].email === email){
+            rta = new Response(true, 409, `Ya existe un usuaio registrado con este email: ${email}`, "");
+            res.status(409).send(rta);    
+        }
+        else{
+            next();
+        }
+     }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible crear el usuario", error);
+        res.status(500).send(rta);
+    });  
+}
+
+
+/*validateEmailAndPassword = (req, res, next) => {
+
+    const { email, user_password,} = req.body;
+
+    var expReg= /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
 }*/
 
@@ -37,4 +64,7 @@ const validateRequestUser = (req, res, next) => {
 }
 
 
-module.exports = {validateRequestUser};
+module.exports = {
+    validateRequestUser,
+    validatePk
+};
