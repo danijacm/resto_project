@@ -33,6 +33,14 @@ const getDataLogin = (dataLogin) => {
 }
 
 
+/*const getDataLogin = (dataLogin) => {
+    return sequelize.query('SELECT email, user_password FROM users where email = ?', {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: [dataLogin]
+    })
+}*/
+
+
 module.exports = {
     insertNewUser,
     getEmail,
