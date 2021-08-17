@@ -16,8 +16,12 @@ const createNewProduct = (req, res) => {
     } = req.body;
 
 
-    insertNewProduct([prod_name, product_desc, price, product_status]).then(() => {
-        rta = new Response(false, 200, "Nuevo producto creado exitosamente", "");
+    insertNewProduct([prod_name, product_desc, price, product_status]).then(function(response){
+        console.log("response: " + response);
+        let id = response.split(",");
+        console.log("ID: " + id[0]);
+
+        rta = new Response(false, 200, "Nuevo producto creado exitosamente", {"Producto": prod_name, "ID": id[0]});
         res.status(200).send(rta)
     }).catch((error) => {
         //validateError(error)

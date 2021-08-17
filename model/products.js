@@ -17,6 +17,7 @@ const getFieldUserAdmin = (email) => {
     });
 };
 
+
 module.exports = {
     insertNewProduct,
     getFieldUserAdmin
