@@ -2,8 +2,11 @@ const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const expressJwt = require('express-jwt');
+require('dotenv').config();
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY; 
 
-const JWT_SECRET_KEY = "D@n13lJ0s3";
+
+//const JWT_SECRET_KEY = "D@n13lJ0s3";
 
 
 let requestLimit = rateLimit({

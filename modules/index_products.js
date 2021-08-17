@@ -1,7 +1,10 @@
-// const express = require('express');
-// const usuario = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const crearUsuario = require('../controladores/usuario/crear_usuario'); 
-// usuario.post('/crear_usuarios',crearUsuario); 
+const {createNewProduct} = require('../source/controllers/products/productModel');
+const {validateUserAdmin} = require('../source/middlewares/products/productsMiddle');
 
-// module.exports = usuario; 
+
+router.post('/create_procuct', validateUserAdmin, createNewProduct);
+
+module.exports = router;
