@@ -15,11 +15,10 @@ const createNewProduct = (req, res) => {
         product_status,
     } = req.body;
 
-
     insertNewProduct([prod_name, product_desc, price, product_status]).then(function(response){
         console.log("response: " + response);
-        let id = response.split(",");
-        console.log("ID: " + id[0]);
+        //let id = response.split(",");
+        //console.log("ID: " + id[0]);
 
         rta = new Response(false, 200, "Nuevo producto creado exitosamente", {"Producto": prod_name, "ID": id[0]});
         res.status(200).send(rta)
