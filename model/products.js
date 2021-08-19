@@ -11,14 +11,56 @@ const insertNewProduct = (dataProduct) => {
 
 
 const getFieldUserAdmin = (email) => {
-    return sequelize.query('SELECT user_admin FROM users WHERE email = ?', {
+    return sequelize.query('SELECT user_admin FROM users where email = ?', {
         type: sequelize.QueryTypes.SELECT,
         replacements: [email]
     });
 };
 
 
+const getProducts = () => {
+    return sequelize.query('SELECT * FROM products where product_status = 1', {
+        type: sequelize.QueryTypes.SELECT,
+        //replacements: [email]
+    });
+};
+
+// /====== Selección ======/
+
+// const selectProductById = (id) => {
+//     return sequelize.query('SELECT * FROM delilah_resto.plates where id_plate = ?;', {
+//             type: sequelize.QueryTypes.SELECT,
+//             replacements: [id]
+//     });
+// };
+
+// /====== Actualización ======/
+
+// const updateProductById =  (id, fields) => {
+//     return sequelize.query(`UPDATE delilah_resto.plates SET ${fields} where id_plate = ?`, {
+//         type: sequelize.QueryTypes.put,
+//         replacements: [id]
+//     });
+// };
+
+// /====== Eliminación ======/
+
+// const deleteProductById = ( id ) => {
+//     return sequelize.query('DELETE FROM delilah_resto.plates WHERE id_plate = ?;', {
+//             type: sequelize.QueryTypes.DELETE,
+//             replacements: [id]
+//     });
+// };
+
+
+//NetTeps-> // desarrollar endpoit de consulta de productos (Get)
+
+            //Endpoint para borrar producto
+            //- Middle de validar que el usuario sea administrador (este mddle ya esta ok) 
+            //- Middle para validar que el id de producto a borrar exista
+
 module.exports = {
     insertNewProduct,
-    getFieldUserAdmin
+    getFieldUserAdmin,
+    getProducts
 };

@@ -9,9 +9,10 @@ const validatePk = (req, res, next) => {
     const { email } = req.body;
 
     getEmail(email).then( function (response){
-        console.log('response: ' + JSON.stringify(response));
+        //console.log('response: ' + JSON.stringify(response));
         if(response.length == 0){
-            next();
+            rta = new Response(true, 409, `Ya existe un usuaio registrado con este email: ${email}`, "");
+            res.status(409).send(rta);    
         }
         else{
             rta = new Response(true, 409, `Ya existe un usuaio registrado con este email: ${email}`, "");
@@ -97,5 +98,5 @@ const validateRequestLogin = (req, res, next) => {
 module.exports = {
     validateRequestUser,
     validatePk,
-    validateRequestLogin
+    validateRequestLogin,
 };

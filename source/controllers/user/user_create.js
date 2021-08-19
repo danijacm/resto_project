@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY; 
 //const crypto = require('bcryptjs');
 const Response = require('../../../classes/response');
 const {
@@ -41,8 +43,8 @@ const loginUser = (req, res) => {
         user_password
     } = req.body;
 
-    const JWT_SECRET_KEY = "D@n13lJ0s3";
-
+    //const JWT_SECRET_KEY = "D@n13lJ0s3";
+    //console.log(`email: ${email} - password: ${user_password}`);
     getDataLogin([email, user_password]).then(function (response) {
         //console.log("Respuesta del Selct " + JSON.stringify(response));
         if (response.length == 0) {
