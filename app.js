@@ -11,7 +11,6 @@ gMiddle(app);
 routes(app);
 
 
-
 //PORT LISTEN
 app.listen(PORT, ()=>{
     console.log(`Server listening on port ${PORT}`);

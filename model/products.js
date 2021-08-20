@@ -25,14 +25,26 @@ const getProducts = () => {
     });
 };
 
+
+ const getOneProduct = (id) => {
+     return sequelize.query('SELECT * FROM products where product_id = ?', {
+             type: sequelize.QueryTypes.SELECT,
+             replacements: [id]
+     });
+ };
+
+
+
+ const deleteProduct = ( id ) => {
+     return sequelize.query('DELETE FROM products where product_id = ?', {
+             type: sequelize.QueryTypes.DELETE,
+             replacements: [id]
+     });
+ };
+
+
 // /====== Selección ======/
 
-// const selectProductById = (id) => {
-//     return sequelize.query('SELECT * FROM delilah_resto.plates where id_plate = ?;', {
-//             type: sequelize.QueryTypes.SELECT,
-//             replacements: [id]
-//     });
-// };
 
 // /====== Actualización ======/
 
@@ -62,5 +74,7 @@ const getProducts = () => {
 module.exports = {
     insertNewProduct,
     getFieldUserAdmin,
-    getProducts
+    getProducts,
+    getOneProduct,
+    deleteProduct
 };

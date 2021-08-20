@@ -5,7 +5,9 @@ const {
 } = require('../../../model/users');
 const {
     insertNewProduct,
-    getProducts
+    getProducts,
+    getOneProduct,
+    deleteProduct
 } = require('../../../model/products');
 
 
@@ -69,7 +71,41 @@ const getAllProducts = (req, res) => {
 }
 
 
+
+const deleteProductByID = (req, res) => {
+    let rta;
+    let prod_name;
+
+    const {
+        product_id
+    } = req.body;
+
+    getOneProduct(product_id).then(function (response) {
+        console.log('Producto: ' + response);
+
+        prod_name = response[0].prod_name;
+
+        deleteProduct(product_id).then(function (response) {
+            console.log('Producto borrado: ' + response);
+
+            rta = new Response(true, 200, `Producto borrado exitosamente`, {"producto borrado": prod_name});
+            res.status(200).send(rta);
+
+        }).catch((error) => {
+            rta = new Response(true, 500, "No fue posible borrar el producto", error);
+            res.status(500).send(rta);
+        });
+
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible borrar el producto", error);
+        res.status(500).send(rta);
+    });
+
+}
+
+
 module.exports = {
     createNewProduct,
-    getAllProducts
+    getAllProducts,
+    deleteProductByID
 }
