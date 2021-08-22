@@ -5,11 +5,14 @@ const {createNewProduct} = require('../source/controllers/products/productFuncti
 const {getAllProducts} = require('../source/controllers/products/productFunctions');
 const {deleteProductByID} = require('../source/controllers/products/productFunctions');
 const {validateUserAdmin} = require('../source/middlewares/products/productsMiddle');
+const {validateProductID} = require('../source/middlewares/products/productsMiddle');
+const {updateProductData} = require('../source/controllers/products/productFunctions');
 
 
 router.post('/create_procuct', validateUserAdmin, createNewProduct);
 router.get('/get_products', getAllProducts);
-router.delete('/delete_product', deleteProductByID);
+router.delete('/delete_product', validateUserAdmin, validateProductID, deleteProductByID);
+router.put('/update_product', validateUserAdmin, validateProductID, updateProductData);
 
 module.exports = router;
 

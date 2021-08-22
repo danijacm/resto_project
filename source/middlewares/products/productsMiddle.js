@@ -1,6 +1,8 @@
 const Response = require('../../../classes/response');
 const {getFieldUserAdmin} = require('../../../model/products');
 
+const {getOneProduct} = require('../../../model/products');
+
 
 const validateUserAdmin = (req, res, next) => {
     let rta;
@@ -9,9 +11,9 @@ const validateUserAdmin = (req, res, next) => {
     const { email } = req.body;
 
     getFieldUserAdmin(email).then( function (response){
-        console.log('response: ' + JSON.stringify(response));
+        //console.log('response: ' + JSON.stringify(response));
         admin = response[0].user_admin;
-        console.log('Admin: ' + admin);
+        //console.log('Admin: ' + admin);
         if(admin === 1){
             next();
         }
@@ -25,6 +27,29 @@ const validateUserAdmin = (req, res, next) => {
     });  
 }
 
+
+const validateProductID = (req, res, next) => {
+    let rta;
+
+    const { product_id } = req.body;
+    //console.log("product_id = " + product_id);
+    getOneProduct(product_id).then( function (response){
+        //console.log('response: ' + JSON.stringify(response));
+     
+        if(response.lenght > 0){
+            next();
+        }
+        else{
+            rta = new Response(true, 409, `El ID del producto no existe`, "");
+            res.status(409).send(rta);    
+        }
+     }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible crear el usuario", error);
+        res.status(500).send(rta);
+    });  
+}
+
 module.exports = {
-    validateUserAdmin
+    validateUserAdmin,
+    validateProductID
 };

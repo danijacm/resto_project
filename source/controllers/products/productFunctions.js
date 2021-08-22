@@ -7,7 +7,8 @@ const {
     insertNewProduct,
     getProducts,
     getOneProduct,
-    deleteProduct
+    deleteProduct,
+    updateProduct
 } = require('../../../model/products');
 
 
@@ -88,7 +89,9 @@ const deleteProductByID = (req, res) => {
         deleteProduct(product_id).then(function (response) {
             console.log('Producto borrado: ' + response);
 
-            rta = new Response(true, 200, `Producto borrado exitosamente`, {"producto borrado": prod_name});
+            rta = new Response(true, 200, `Producto borrado exitosamente`, {
+                "producto borrado": prod_name
+            });
             res.status(200).send(rta);
 
         }).catch((error) => {
@@ -104,8 +107,39 @@ const deleteProductByID = (req, res) => {
 }
 
 
+const updateProductData = (req, res) => {
+    let arrayProduct = [];
+
+    const {
+        email,
+        product_id,
+        product_data
+    } = req.body;
+
+    //console.log("product_data = " + JSON.stringify (product_data));
+
+    for (let key in product_data) {
+        arrayProduct.push(`${key}='${product_data[key]}'`)
+    }
+    //console.log("arrayProduct = " + JSON.stringify (arrayProduct));
+
+    updateProduct(product_id, arrayProduct).then(function (response) {
+        //console.log('Producto: ' + JSON.stringify (response));
+
+        rta = new Response(true, 200, `Producto actualizado exitosamente`, "");
+        res.status(200).send(rta);
+
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible actualizar el producto", error);
+        res.status(500).send(rta);
+    });
+
+}
+
+
 module.exports = {
     createNewProduct,
     getAllProducts,
-    deleteProductByID
+    deleteProductByID,
+    updateProductData
 }

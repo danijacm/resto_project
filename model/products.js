@@ -43,26 +43,12 @@ const getProducts = () => {
  };
 
 
-// /====== Selección ======/
-
-
-// /====== Actualización ======/
-
-// const updateProductById =  (id, fields) => {
-//     return sequelize.query(`UPDATE delilah_resto.plates SET ${fields} where id_plate = ?`, {
-//         type: sequelize.QueryTypes.put,
-//         replacements: [id]
-//     });
-// };
-
-// /====== Eliminación ======/
-
-// const deleteProductById = ( id ) => {
-//     return sequelize.query('DELETE FROM delilah_resto.plates WHERE id_plate = ?;', {
-//             type: sequelize.QueryTypes.DELETE,
-//             replacements: [id]
-//     });
-// };
+ const updateProduct =  (product_id, product_data) => {
+    return sequelize.query(`UPDATE products SET ${product_data} where product_id = ?`, {
+        type: sequelize.QueryTypes.put,
+        replacements: [product_id]
+    })
+}
 
 
 //NetTeps-> // desarrollar endpoit de consulta de productos (Get)
@@ -76,5 +62,6 @@ module.exports = {
     getFieldUserAdmin,
     getProducts,
     getOneProduct,
-    deleteProduct
+    deleteProduct,
+    updateProduct
 };
