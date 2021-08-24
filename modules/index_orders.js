@@ -1,7 +1,11 @@
-// const express = require('express');
-// const usuario = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const crearUsuario = require('../controladores/usuario/crear_usuario'); 
-// usuario.post('/crear_usuarios',crearUsuario); 
+const {createNewOrder} = require('../source/controllers/orders/ordersFunctions');
+const {validateOrderProducts} = require('../source/middlewares/orders/oerdersMiddle');
 
-// module.exports = usuario; 
+
+
+router.post('/make_order', validateOrderProducts, createNewOrder);
+
+module.exports = router;

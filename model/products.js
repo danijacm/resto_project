@@ -51,11 +51,14 @@ const getProducts = () => {
 }
 
 
-//NetTeps-> // desarrollar endpoit de consulta de productos (Get)
+const getExistProduct = (id) => {
+    return sequelize.query('SELECT * FROM products where product_id = ? and product_status = 1', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [id]
+    });
+};
 
-            //Endpoint para borrar producto
-            //- Middle de validar que el usuario sea administrador (este mddle ya esta ok) 
-            //- Middle para validar que el id de producto a borrar exista
+
 
 module.exports = {
     insertNewProduct,
@@ -63,5 +66,6 @@ module.exports = {
     getProducts,
     getOneProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    getExistProduct
 };

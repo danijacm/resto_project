@@ -8,7 +8,6 @@ INSERT INTO payment_methods (payment_desc)VALUES
 ('Tarjeta');
 
 INSERT INTO order_status (status_desc)VALUES 
-('Pendiente'),
 ('Confirmada'),
 ('En preparación'),
 ('En camino'),
