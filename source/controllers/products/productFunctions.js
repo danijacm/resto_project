@@ -133,7 +133,7 @@ const updateProductData = (req, res) => {
         rta = new Response(true, 500, "No fue posible actualizar el producto", error);
         res.status(500).send(rta);
     });
-
+    
 }
 
 

@@ -40,7 +40,7 @@ const validateRequestUser = (req, res, next) => {
 
     const { email, fullname, phone, user_address, user_password, user_admin} = req.body;
 
-    console.log(`${email}\n ${fullname}\n ${phone}\n ${user_address}\n ${user_password}\n ${user_admin}`);
+    //console.log(`${email}\n ${fullname}\n ${phone}\n ${user_address}\n ${user_password}\n ${user_admin}`);
     
     if(email == null || fullname == null || phone == null || user_address == null || 
         user_password == null || user_admin == null){  
