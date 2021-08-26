@@ -11,8 +11,7 @@ const validatePk = (req, res, next) => {
     getEmail(email).then( function (response){
         //console.log('response: ' + JSON.stringify(response));
         if(response.length == 0){
-            rta = new Response(true, 409, `Ya existe un usuaio registrado con este email: ${email}`, "");
-            res.status(409).send(rta);    
+            next();
         }
         else{
             rta = new Response(true, 409, `Ya existe un usuaio registrado con este email: ${email}`, "");

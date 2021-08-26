@@ -16,7 +16,7 @@ const validateOrderProducts = async (req, res, next) => {
         await getExistProduct(order_detail[i].product_id).then(function (response) {
             if (response.length === 0) {
                 error_id = true;
-                arrayProduct.push(`product_id: ${order_detail[i].product_id}`);
+                arrayProduct.push(`product_id: ${order_detail[i].product_id}`); 
             }
         }).catch((error) => {
             rta = new Response(true, 500, "No fue posible procesar su orden", error);
@@ -43,7 +43,6 @@ const validateOrderRequest = async (req, res, next) => {
     } = req.body;
 
     if( info_order == null || order_detail == null ){  
-       
         error = true;   
     }
     else{

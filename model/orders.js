@@ -1,7 +1,13 @@
-// const sequelize = require('../02_BdConection/conection'); 
-// const insert_usuario = (usuario) =>{
-//     sequelize.query('INSERT INTO usuarios(dni,nombre,apellido,password,user_admin) VALUES(?, ?, ?, ?, ?)',
-//         { replacements: usuario, type: sequelize.QueryTypes.INSERT }
-//     );
-// };
-// module.exports = insert_usuario; 
+const sequelize = require('../config/conection.js');
+
+const insertNewOrder = (orderData) => {
+    return sequelize.query("INSERT INTO orders (email, payment_code, order_address, status_id) VALUES(?,?,?,?)", { 
+        type: sequelize.QueryTypes.INSERT,
+        replacements:orderData,
+    })
+};
+
+
+module.exports = {
+    insertNewOrder
+};
