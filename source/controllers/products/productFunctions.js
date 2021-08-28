@@ -40,22 +40,22 @@ const createNewProduct = (req, res) => {
 const getAllProducts = (req, res) => {
     let rta;
 
-    const {
+    /*const {
         email
-    } = req.body;
+    } = req.body;*/
 
-    getEmail(email).then(function (response) {
+    /*getEmail(email).then(function (response) {
         console.log('getEmail response: ' + JSON.stringify(response));
         if (response.length == 0) {
             rta = new Response(true, 404, `El usuario: ${email} no esta registrado en el sistema`, "");
             res.status(404).send(rta);
-        }
-
+        }*/
+        console.log("Estoy en el controlador");
         getProducts().then(function (response) {
-            console.log("Ptoducts: " + response);
+            //console.log("Ptoducts: " + response);
             if (response.length === 0) {
-                rta = new Response(false, 204, "No existen productos disponibles", response);
-                res.status(204).send(rta)
+                rta = new Response(false, 404, "No existen productos disponibles", response);
+                res.status(404).send(rta)
             } else {
                 rta = new Response(false, 200, "Consulta de productos exitosa", response);
                 res.status(200).send(rta)
@@ -65,10 +65,10 @@ const getAllProducts = (req, res) => {
             res.status(500).send(rta);
         });
 
-    }).catch((error) => {
+    /*}).catch((error) => {
         rta = new Response(true, 500, "No fue posible crear el usuario", error);
         res.status(500).send(rta);
-    });
+    });*/
 }
 
 

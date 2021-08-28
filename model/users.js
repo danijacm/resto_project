@@ -1,14 +1,5 @@
 const sequelize = require('../config/conection.js');
 
-
-/*const insertNewUser = (newUserData) => {
-    return sequelize.query("INSERT INTO users (email, fullname, phone, user_address, user_password, user_admin) VALUES(?,?,?,?,MD5(?),?)", { 
-        type: sequelize.QueryTypes.INSERT,
-        replacements:newUserData,
-    })
-};*/
-
-
 const insertNewUser = (newUserData) => {
     return sequelize.query("INSERT INTO users (email, fullname, phone, user_address, user_password, user_admin) VALUES(?,?,?,?,?,?)", { 
         type: sequelize.QueryTypes.INSERT,
@@ -32,9 +23,17 @@ const getDataLogin = (dataLogin) => {
     })
 }
 
+const getUserId = ( user_id ) => {
+    return sequelize.query('SELECT user_id FROM users where user_id = ?', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [user_id]
+    })
+}
+
 
 module.exports = {
     insertNewUser,
     getEmail,
-    getDataLogin
+    getDataLogin,
+    getUserId
 };

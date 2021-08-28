@@ -1,13 +1,14 @@
 CREATE DATABASE dani_resto_db
 
 CREATE TABLE users (
+  user_id int(3) NOT NULL AUTO_INCREMENT,
   email varchar(50) NOT NULL,
   fullname varchar (150) NOT NULL,
   phone varchar(15) NOT NULL,
   user_address varchar(150) NOT NULL,
   user_password varchar(20) NOT NULL,
   user_admin int(1) NOT NULL,
-  PRIMARY KEY (email)
+  PRIMARY KEY (user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -45,13 +46,14 @@ CREATE TABLE payment_methods (
 
 CREATE TABLE orders (
   order_id int(8) NOT NULL AUTO_INCREMENT,
+  user_id int(3),
   email varchar(20),
   payment_code int(1) NOT NULL,
   order_date timestamp,
   order_address varchar(150) NOT NULL,
   status_id int(1),
   PRIMARY KEY (order_id),
-  FOREIGN KEY (email) REFERENCES users(email),
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
   FOREIGN KEY (payment_code) REFERENCES payment_methods(payment_code),
   FOREIGN KEY (status_id) REFERENCES order_status(status_id)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;

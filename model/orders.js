@@ -1,7 +1,7 @@
 const sequelize = require('../config/conection.js');
 
 const insertNewOrder = (orderData) => {
-    return sequelize.query("INSERT INTO orders (email, payment_code, order_address, status_id) VALUES(?,?,?,?)", { 
+    return sequelize.query("INSERT INTO orders (user_id, email, payment_code, order_address, status_id) VALUES(?,?,?,?,?)", { 
         type: sequelize.QueryTypes.INSERT,
         replacements:orderData,
     })
@@ -23,8 +23,38 @@ const getTotalOrderValue = (id) => {
     })
 };
 
+
+/*UPDATE nombre_tabla SET columna1 = valor1, columna2 = valor2 WHERE columna3 = valor3*/
+
+const updateOrder = (dataOrder) => {
+    return sequelize.query(`UPDATE orders SET payment_code = ?, status_id = ? WHERE order_id = ?`, 
+    { 
+        type: sequelize.QueryTypes.UPDATE,
+        replacements:dataOrder,
+    })
+};
+
+
+const getOrder = ( order_id ) => {
+    return sequelize.query('SELECT order_id FROM orders WHERE order_id = ?', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [order_id]
+    })
+}
+
+const getOrderUserId = ( user_id ) => {
+    return sequelize.query('SELECT user_id FROM orders WHERE user_id = ? and status_id = 6', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [user_id]
+    })
+}
+
+
 module.exports = {
     insertNewOrder,
     insertProductQuantity,
-    getTotalOrderValue
+    getTotalOrderValue,
+    updateOrder,
+    getOrder, 
+    getOrderUserId
 };
