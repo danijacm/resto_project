@@ -24,13 +24,25 @@ const validatePk = (req, res, next) => {
 }
 
 
-/*validateEmailAndPassword = (req, res, next) => {
+const validateUser = (req, res, next) => {
+    let rta;
 
-    const { email, user_password,} = req.body;
+    const { info_order } = req.body;
 
-    var expReg= /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+    getEmail(info_order.email).then( function (response){
+        if(response.length > 0){
+            next();
+        }
+        else{
+            rta = new Response(true, 409, `El usuario: ${info_order.email} no esta registrado`, "");
+            res.status(409).send(rta);    
+        }
+     }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible crear el usuario", error);
+        res.status(500).send(rta);
+    });  
+}
 
-}*/
 
 
 const validateRequestUser = (req, res, next) => {
@@ -99,4 +111,5 @@ module.exports = {
     validateRequestUser,
     validatePk,
     validateRequestLogin,
+    validateUser
 };
