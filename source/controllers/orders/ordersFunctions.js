@@ -99,9 +99,36 @@ const changeOrderStatus = (req, res) => {
 }
 
 
+//Middlewares pendientes: 
+// - Validar que la orden exista para el usuario
+// - Que la orden a cancelar se encuentre en un estado válido para cancelación
+// - Validar que el request venga correcto 
+const cancelOrder = (req, res) => {
+    let rta;
+    let cancel_status = 5;
+    const {
+        order_id
+    } = req.body;
+
+    updateOrderStatus([cancel_status, order_id]).then(() => {
+
+        rta = new Response(false, 200, "Su orden ha sido cancelada");
+        res.status(200).send(rta)
+
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible cancelar la orden", error);
+        res.status(500).send(rta);
+    });
+}
+
+
+
+
+
 
 module.exports = {
     createNewOrder,
     confirmOrder,
-    changeOrderStatus
+    changeOrderStatus,
+    cancelOrder
 }
