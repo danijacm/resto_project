@@ -115,11 +115,11 @@ const validateOrderId = (req, res, next) => {
     const {
         order_id,
     } = req.body;
-    console.log("order_id = " + order_id);
+    //console.log("order_id = " + order_id);
     getOrder(order_id).then(function (response) {
         if (response.length === 0) {
-            rta = new Response(true, 400, "La orden que intenta confirmar no existe");
-            res.status(400).send(rta);
+            rta = new Response(true, 404, "La orden no existe, por favor verifique");
+            res.status(404).send(rta);
         }
         else{
             next();
@@ -153,10 +153,35 @@ const validateOrderUserId = (req, res, next) => {
 }
 
 
+const validateOrderStatus = (req, res) => {
+    let rta;
+
+    const {
+        status_id
+    } = req.body;
+
+    getOrderStatus(status_id).then(function (response) {
+        if(response.length <= 0){
+            rta = new Response(false, 404, `El campo status_id enviado no es válido`);
+            res.status(404).send(rta);
+        }
+        else{
+            next();
+        }
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible actualizar el estado de la orden", error);
+        res.status(500).send(rta);
+    });
+
+}
+
+
+
 module.exports = {
     validateOrderProducts,
     validateOrderRequest,
     validateOrdeConfrRequest,
     validateOrderId,
-    validateOrderUserId
+    validateOrderUserId,
+    validateOrderStatus
 }

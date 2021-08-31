@@ -24,8 +24,6 @@ const getTotalOrderValue = (id) => {
 };
 
 
-/*UPDATE nombre_tabla SET columna1 = valor1, columna2 = valor2 WHERE columna3 = valor3*/
-
 const updateOrder = (dataOrder) => {
     return sequelize.query(`UPDATE orders SET payment_code = ?, status_id = ? WHERE order_id = ?`, 
     { 
@@ -50,11 +48,30 @@ const getOrderUserId = ( user_id ) => {
 }
 
 
+const updateOrderStatus = (dataOrder) => {
+    return sequelize.query(`UPDATE orders SET status_id = ? WHERE order_id = ?`, 
+    { 
+        type: sequelize.QueryTypes.UPDATE,
+        replacements:dataOrder,
+    })
+};
+
+
+const getOrderStatus = (status_id) => {
+    return sequelize.query('SELECT * FROM order_status WHERE status_id = ?', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [status_id]
+    })
+}
+
+
 module.exports = {
     insertNewOrder,
     insertProductQuantity,
     getTotalOrderValue,
     updateOrder,
     getOrder, 
-    getOrderUserId
+    getOrderUserId,
+    updateOrderStatus,
+    getOrderStatus
 };

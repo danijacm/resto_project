@@ -1,5 +1,8 @@
 const Response = require('../../../classes/response');
-const {getEmail} = require('../../../model/users');
+const {
+    getEmail,
+    getUserProfile
+} = require('../../../model/users');
 
 
 const validatePk = (req, res, next) => {
@@ -44,17 +47,24 @@ const validateUser = (req, res, next) => {
 }
 
 
-const validateUserId = (req, res, next) => {
+const validateUserProfile = (req, res, next) => {
     let rta;
 
     const { user_id } = req.body;
 
-    getEmail(info_order.email).then( function (response){
+    getUserProfile(user_id).then( function (response){
         if(response.length > 0){
-            next();
+            console.log("Rta user_admin: " + response);
+            if(response[0].user_admin === 1){
+                next();
+            }
+            else{
+                rta = new Response(true, 403, `El usuario no tiene privilegios de administrador`);
+                res.status(409).send(rta);   
+            }
         }
         else{
-            rta = new Response(true, 409, `El usuario: ${info_order.email} no esta registrado`, "");
+            rta = new Response(true, 409, `El usuario con ID: ${user_id} no esta registrado`);
             res.status(409).send(rta);    
         }
      }).catch((error) => {
@@ -130,5 +140,6 @@ module.exports = {
     validateRequestUser,
     validatePk,
     validateRequestLogin,
-    validateUser
+    validateUser,
+    validateUserProfile
 };

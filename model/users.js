@@ -17,7 +17,7 @@ const getEmail = ( email ) => {
 
 
 const getDataLogin = (dataLogin) => {
-    return sequelize.query('SELECT email, user_password FROM users where email = ? and user_password = ?', {
+    return sequelize.query('SELECT * FROM users where email = ? and user_password = ?', {
         type: sequelize.QueryTypes.SELECT,
         replacements: dataLogin
     })
@@ -30,10 +30,18 @@ const getUserId = ( user_id ) => {
     })
 }
 
+const getUserProfile = ( user_id ) => {
+    return sequelize.query('SELECT user_admin FROM users where user_id = ?', {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: [user_id]
+    })
+}
+
 
 module.exports = {
     insertNewUser,
     getEmail,
     getDataLogin,
-    getUserId
+    getUserId,
+    getUserProfile
 };

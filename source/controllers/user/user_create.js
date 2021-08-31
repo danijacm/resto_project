@@ -20,14 +20,9 @@ const createNewUser = (req, res) => {
         user_admin
     } = req.body;
 
-    //console.log("request:" + email + " " + fullname + " " + phone + " " + user_address + " " + user_password + " " + user_admin);
-    
-    //let cryptoPass = await crypto.hash(user_password, 8);  // Cifro el password enviado por el usuario para no almacenarlo en claro en la BD
-    //console.log("Clave cifrada: " + cryptoPass);
 
-
-    insertNewUser([email, fullname, phone, user_address, user_password, user_admin]).then(() => {
-        rta = new Response(false, 200, "usuario creado exitosamente", "");
+    insertNewUser([email, fullname, phone, user_address, user_password, user_admin]).then((response) => {
+        rta = new Response(false, 200, "usuario creado exitosamente", {"user_id": response[0]});
         res.status(200).send(rta)
     }).catch((error) => {
         //validateError(error)
@@ -60,7 +55,7 @@ const loginUser = (req, res) => {
                 }, {
                     algorithm: 'RS256'
                 });
-            rta = new Response(false, 200, "usuario logueado exitosamente", token);
+            rta = new Response(false, 200, "usuario logueado exitosamente", {"user_id": response[0].user_id, "Token": token});
             res.status(200).send(rta)
         }
     }).catch((error) => {
