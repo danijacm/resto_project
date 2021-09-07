@@ -13,11 +13,13 @@ const {validateOrderStatus} = require('../source/middlewares/orders/oerdersMiddl
 const {validateUser} = require('../source/middlewares/users/usersMiddle');
 const {validateUserProfile} = require('../source/middlewares/users/usersMiddle');
 const {cancelOrder} = require('../source/controllers/orders/ordersFunctions');
+const {getInfOrdersByUser} = require('../source/controllers/orders/ordersFunctions'); 
 
 
 router.post('/make_order', validateUser, validateOrderRequest, validateOrderProducts, createNewOrder);
 router.put('/confirm_order', validateOrderUserId, validateOrderId, validateOrdeConfrRequest, confirmOrder); 
 router.put('/update_order_status', validateUserProfile, validateOrderId, validateOrderStatus, changeOrderStatus);
 router.put('/cancel_order', cancelOrder);
+router.get('/get_orders', getInfOrdersByUser);
 
 module.exports = router;

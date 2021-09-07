@@ -5,7 +5,9 @@ const {
     getTotalOrderValue,
     updateOrder,
     updateOrderStatus,
-    getOrderStatus
+    getOrderStatus,
+    getOrdersByUser,
+    getOrdStatAndPaymeth
 } = require('../../../model/orders');
 
 
@@ -123,6 +125,88 @@ const cancelOrder = (req, res) => {
 
 
 
+/*function searchOrderDesc (ord_status, paym_code){
+    
+    getOrdStatAndPaymeth([ord_status, paym_code]).then(function (response) {
+
+        return response;
+
+    }).catch((error) => {
+        rta = new Response(true, 500, "No consultar datos de la orden", error);
+        res.status(500).send(rta);
+    });
+}*/
+
+
+/*const getInfOrdersByUser = async (req, res) => {
+    let rta;
+    let objOrder = new Object();
+    let arrayOrders = [];
+    const {
+        user_id,
+    } = req.body;
+    
+    getOrdersByUser(user_id).then(function (response) {
+        //console.log("response = " + response);
+         //objOrder.nameUser = response[i].fullname;
+        for (let i = 0; i < response.length; i++) {
+            objOrder.order_address = response[i].order_address;
+            await getOrdStatAndPaymeth([response[i].status_id, response[i].payment_code]).then(function (response2) {
+                //console.log('response2 = ' + response2);
+                objOrder.status = response2[0].status_desc;
+                objOrder.payment_meth = response2[0].payment_desc;
+                arrayOrders.push(objOrder);  
+            }).catch((error) => {
+                rta = new Response(true, 500, "No fue posible consultar datos de la orden", error);
+                res.status(500).send(rta);
+            });
+        }   
+        
+        rta = new Response(false, 200, `Las ordenes encontradas para ${response[0].fullname}`, arrayOrders);
+        res.status(200).send(rta); 
+
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible crear la orden", error);
+        res.status(500).send(rta);
+    });
+}*/
+
+
+
+
+const getInfOrdersByUser = async (req, res) => {
+    let rta;
+    let arrayOrders = [];
+    const {
+        user_id,
+    } = req.body;
+    
+    try {
+        const response = await getOrdersByUser(user_id); // myCar['make']  = 'Ford';
+        console.log("response: " + JSON.stringify (response));
+       // console.log("Name: " + response[0]['fullname']);  
+
+        for (let i = 0; i < response.length; i++) {
+            try {
+                const response2 = await getOrdStatAndPaymeth([ response[i]['status_id'], response[i]['payment_code'] ]);
+                let objOrder = new Object();
+                objOrder.order_status = response2[0].status_desc;
+                objOrder.payment_meth = response2[0].payment_desc;
+                //console.log("i = " + i);
+                //arrayOrders.push(response2[0]); 
+                arrayOrders.push(objOrder); 
+            } catch (error) {
+                rta = new Response(true, 500, "Error consultando la Base de datos", error);
+                res.status(500).send(rta);
+            }
+        }
+        res.status(200).send(new Response(false, 200, `Órdenes en curso del usuario: ${response[0]['fullname']}`, arrayOrders))
+        res.status(500).send(rta);           
+    } catch (error) {
+        rta = new Response(true, 500, "Error consultando la Base de datos", error);
+        res.status(500).send(rta);
+    }
+}
 
 
 
@@ -130,5 +214,6 @@ module.exports = {
     createNewOrder,
     confirmOrder,
     changeOrderStatus,
-    cancelOrder
+    cancelOrder,
+    getInfOrdersByUser
 }
