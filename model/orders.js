@@ -16,7 +16,7 @@ const insertProductQuantity = (productQuantity) => {
 
 
 const getTotalOrderValue = (id) => {
-    return sequelize.query(`SELECT p.product_id, o.quantity, p.price FROM order_products o INNER JOIN products p ON (o.product_id = p.product_id) where o.order_id = ?`, {
+    return sequelize.query(`SELECT p.product_id, p.prod_name, o.quantity, p.price FROM order_products o INNER JOIN products p ON (o.product_id = p.product_id) where o.order_id = ?`, {
         type: sequelize.QueryTypes.SELECT,
         replacements: [id],
     })
@@ -85,6 +85,7 @@ const getOrdStatAndPaymeth = (dataOrder) => {
             replacements: dataOrder
     })
 }
+
 
 
 module.exports = {
