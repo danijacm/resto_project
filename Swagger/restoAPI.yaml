@@ -1,0 +1,542 @@
+swagger: "2.0"
+info:
+  description: "Esta API permite realizar pedidos online a un restaurante, también brinda la posibilidad a que un usuario con perfil de administrador puda realizar operaciones como agregar, modificar o eliminar productos, cambiar el estado de un pedido entre otras operaciones"
+  version: "1.0.0"
+  title: "Delilah Resto API"
+host: "localhost:3000"  
+basePath: "/v1"
+tags:
+- name: "User"
+  description: "Esta entidad permite la creación y el login de un usuario"
+- name: "Admin"
+  description: "Informacion que puede observar el administrador del sitio"
+- name: "Order"
+  description: "Informacion de los pedidos"
+- name: "Plates"
+  description: "Informacion de los platos"
+schemes:
+- "http"
+
+paths: 
+  /user/user_login:
+    post:
+      tags:
+      - "User"
+      summary: "Inicio de sesión" 
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Permite la validación de un usuario en el sistema"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              description: "Email con el cual el usuario se registro en el sistema"
+            user_password:
+              type: "string"
+              description: "Password asignado por el usuario"
+
+      responses:
+        "200":
+          description: "Login Exitoso"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error en el login"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo HTTP de respuesta"
+              mensaje:
+                type: "string"
+                example: "Usuario logueado exitosamente"
+                description: "mensaje se respuesta"
+              respuesta:
+                  $ref: "#/definitions/respuesta"
+
+        "400":
+          description: "Bad request"
+          
+        "403":
+          description: "Usuario o clave incorrecta"
+          
+        "500":
+          description: "Error general del sistema"
+
+  /user/create_user: 
+    post:
+      tags: 
+      - "User"
+      summary: "Crear usuario"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Permite crear un nuevo usuario"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              example: "minombre@gmail.com"
+              description: "Email con el que se quiere regustrar en el sistema"
+            fullname:
+              type: "string"
+              example: "Daniel José Jácome"
+              description: "Nombre completo del uaurio"
+            phone: 
+              type: "string"
+              example: "3015019654"
+              description: "Telefono del usuario"
+            user_address:
+              type: "string"
+              example: "Carrera 27 # 4 - 38"
+              description: "Dirección del usuario"
+            user_password:
+              type: "string"
+              example: "12345"
+              description: "Password deseado por el usuario"
+            user_admin:
+              type: "integer"
+              example: 1
+              description: "1 = para usuarios administradores, 0 = para usuarios que no tienen privilegios de administrador"
+        
+      responses:
+        "200":
+          description: "Usuario creado exitosamente"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error en el login"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo HTTP de respuesta"
+              mensaje:
+                type: "string"
+                example: "Usuario creado exitosamente"
+                description: "mensaje se respuesta"
+              respuesta:
+                  $ref: "#/definitions/rta_new_user"
+        "400":
+          description: "Bad request"
+          
+        "409":
+          description: "Ya existe un usuario registrado con el mismo email"
+          
+        "500":
+          description: "Error general del sistema"
+          
+      
+  /user/{id_user}:
+    put:
+      tags:
+      - "User"
+      summary: "modificar usuario" 
+      parameters:
+      - name: "id_user"
+        in: "path"
+        description: "id de usuario a modificar"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: 'datos a modificar'
+        required: true
+        schema:
+          type: "object"
+          properties:
+            data:
+              $ref: "#/definitions/newUser"
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                $ref: "#/definitions/User"
+        "400":
+          description: "no autorizado"
+      security:
+      - api_key: []
+          
+    delete:
+      tags:
+      - "User"
+      summary: "borrar usuario"
+      parameters:
+      - name: "id_user"
+        in: "path"
+        description: "id del usuario"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                $ref: "#/definitions/User"
+        "400":
+          description: "no autorizado"
+      security:
+        - api_key: []
+      
+  /admin:
+    get:
+      tags:
+      - "Admin"
+      summary: "Consultar pedidos" 
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                type: "array"
+                description: "lista de pedidos"
+                items:
+                  $ref: '#/definitions/orderItem'
+        "400":
+            description: "no autorizado"
+      security:
+        - api_key: []
+                
+  /admin/order/{id}:
+    get:
+      tags:
+      - "Admin"
+      summary: "Consultar informacion de pedido" 
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "username de usuario a modificar"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                $ref: "#/definitions/orderItem"
+                
+        "400":
+          description: "no autorizado"
+      security:
+        - api_key: []
+        
+  /admin/status:
+    put:
+      tags:
+      - "Admin"
+      summary: "actualizar estado del pedido" 
+      parameters:
+      - in: "body"
+        name: "body"
+        description: 'datos a modificar'
+        required: true
+        schema:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "id del pedido"
+            status:
+              type: "integer"
+              description: "estado al cual debe ser actulizado"
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                $ref: "#/definitions/orderItem"
+                
+        "400":
+          description: "no autorizado"
+      security:
+        - api_key: []
+  
+  /order/neworder: 
+    post:
+      tags: 
+      - "Order"
+      summary: "Crear nuevo pedido"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "informacion del pedido"
+        required: true
+        schema:
+          $ref: "#/definitions/newOrder"
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                type: "object"
+                description: "informacion del pedido creado"
+                properties:
+                  id: 
+                    type: "integer"
+                    description: "id del evento de pedido creado"
+                  number: 
+                    type: "integer"
+                    description: "numero del pedido"
+                  hour:
+                    type: "string"
+                    description: "hora del pedido"
+        "400":
+          description: "no autorizado"
+      security:
+      - api_key: []
+  
+  /order/{id}:
+    get:
+      tags:
+      - "Order"
+      summary: "Consultar informacion de pedido" 
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "username de usuario a modificar"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                $ref: "#/definitions/orderItem"
+                
+        "400":
+          description: "no autorizado"
+      security:
+        - api_key: []
+  
+  /plates:
+    get:
+      tags:
+      - "Plates"
+      summary: "Consultar platos" 
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                description: "si fue exitosa o no la peticion"
+              status_code:
+                type: "integer"
+                description: "codigo de estado"
+              data:
+                type: "array"
+                description: "lista de pedidos"
+                items:
+                  $ref: '#/definitions/plateItem'
+        "400":
+            description: "no autorizado"
+      security:
+        - api_key: []
+  
+  
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+  
+    
+definitions:
+  respuesta:
+    type: "object"
+    properties:
+      user_id:
+        type: "integer"
+        example: 1
+        description: "ID generado por la BD automaticamente"
+      Token:
+        type: "string"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbC..."
+        description: "Token único generado por el sistema para el usuario (Timeout = 1h)"
+
+  rta_new_user:
+    type: "object"
+    properties:
+      user_id:
+        type: "integer"
+        example: 1
+        description: "ID generado por la BD automaticamente"
+
+  newUser:
+    type: "object"
+    properties:
+      Fullname:
+        type: "string"
+        description: "nombre y apellidpo del usuario"
+      Email:
+        type: "string"
+        description: "correo del usuario"
+      Phone:
+        type: "string"
+        description: "telefono del usuario"
+      Address:
+        type: "string"
+        description: "direccion de envio del usuario"
+      Username:
+        type: "string"
+        description: "identificador unico del usuario"
+      Password:
+        type: "string"
+        description: "contraseña del usuario"
+
+  orderItem:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "id del pedido"
+      status:
+        type: "string"
+        description: "estado del pedido"
+      hour:
+        type: "string"
+        description: "hora pedido"
+      number:
+        type: "integer"
+        description: "numero del pedido"
+      description:
+        type: "string"
+        description: "detalles del pedido"
+      payment:
+        type: "object"
+        properties:
+          method:
+            type: "string"
+            description: "medio de pago"
+          value:
+            type: "integer"
+            description: "dinero cancelado"
+      fullname:
+        type: "string"
+        description: "nombre y apellidpo del usuario"
+      Phone:
+        type: "string"
+        description: "telefono del usuario"
+      address:
+        type: "string"
+        description: "direccion de envio del usuario"
+  
+  newOrder:
+    type: "object"
+    properties:
+      id_user:
+        type: "integer"
+        description: "id del usuario que ordeno"
+      order:
+        type: "array"
+        description: "lista con los id's de los platos a pedir"
+        items:
+          type: "object"
+          description: "lista con los id's de los platos a pedir"
+          properties: 
+            id_plate:
+              type: "integer"
+              description: "id del plato apedir"
+            quantity:
+              type: "integer"
+              description: "cantidad de platos"
+            
+      payment:
+        type: "object"
+        properties:
+          method:
+            type: "string"
+            description: "id del medio de pago"
+          value:
+            type: "integer"
+            description: "dinero cancelado"
+      address:
+        type: "string"
+        description: "direccion de envio del pedido"
+
+  plateItem:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "id del plato"
+      name: 
+        type: "string"
+        description: "nombre del plato"
+      value:
+        type: "integer"
+        description: "precio del plato"
+        
+
+
+    
+
+      

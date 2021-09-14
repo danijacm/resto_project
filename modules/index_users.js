@@ -9,6 +9,6 @@
  const {validateRequestLogin} = require('../source/middlewares/users/usersMiddle.js');
 
  router.post('/create_user', validateRequestUser, validatePk, createNewUser);
- router.get('/user_login', validateRequestLogin, loginUser);
+ router.post('/user_login', validateRequestLogin, loginUser);
 
  module.exports = router;

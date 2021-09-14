@@ -146,7 +146,8 @@ const getInfOrdersByUser = async (req, res) => {
         const response = await getOrdersByUser(user_id);
         for (let i = 0; i < response.length; i++) {
             try {
-                const response2 = await getOrdStatAndPaymeth([response[i]['status_id'], response[i]['payment_code']]);
+                //const response2 = await getOrdStatAndPaymeth([response[i]['status_id'], response[i]['payment_code']]);
+                const response2 = await getOrdStatAndPaymeth([response[i].status_id, response[i].payment_code]);
                 let objOrder = new Object();
                 objOrder.order_id = response[i].order_id;
                 objOrder.order_address = response[i].order_address;
