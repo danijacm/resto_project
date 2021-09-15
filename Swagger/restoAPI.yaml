@@ -61,12 +61,18 @@ paths:
 
         "400":
           description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error" 
           
         "403":
           description: "Usuario o clave incorrecta"
+          schema:
+            $ref: "#/definitions/rta_error"
           
         "500":
           description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"          
 
   /user/create_user: 
     post:
@@ -119,7 +125,7 @@ paths:
               status:
                 type: "integer"
                 example: 200
-                description: "Codigo HTTP de respuesta"
+                description: "Codigo de respuesta HTTP"
               mensaje:
                 type: "string"
                 example: "Usuario creado exitosamente"
@@ -128,81 +134,19 @@ paths:
                   $ref: "#/definitions/rta_new_user"
         "400":
           description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error" 
           
         "409":
           description: "Ya existe un usuario registrado con el mismo email"
+          schema:
+            $ref: "#/definitions/rta_error"           
           
         "500":
           description: "Error general del sistema"
-          
-      
-  /user/{id_user}:
-    put:
-      tags:
-      - "User"
-      summary: "modificar usuario" 
-      parameters:
-      - name: "id_user"
-        in: "path"
-        description: "id de usuario a modificar"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: 'datos a modificar'
-        required: true
-        schema:
-          type: "object"
-          properties:
-            data:
-              $ref: "#/definitions/newUser"
-      responses:
-        "200":
-          description: "Respuesta exitosa"
           schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
-                $ref: "#/definitions/User"
-        "400":
-          description: "no autorizado"
-      security:
-      - api_key: []
+            $ref: "#/definitions/rta_error"           
           
-    delete:
-      tags:
-      - "User"
-      summary: "borrar usuario"
-      parameters:
-      - name: "id_user"
-        in: "path"
-        description: "id del usuario"
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "respuesta exitosa"
-          schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
-                $ref: "#/definitions/User"
-        "400":
-          description: "no autorizado"
-      security:
-        - api_key: []
       
   /admin:
     get:
@@ -408,8 +352,28 @@ securityDefinitions:
     name: "api_key"
     in: "header"
   
+
     
 definitions:
+  rta_error:
+    type: "object"
+    properties:
+      error:
+        type: "boolean"
+        example: true
+        description: "True: indica que hubo un error"
+      status:
+        type: "integer"
+        example: 4XX, 5XX
+        description: "Código de respuesta http (4xx - 5xx) generado por el Backend"
+      mensaje:
+        type: "string"
+        description: "Mensaje que especifica el tipo de error"
+      respuesta:
+        type: "object"
+        description: "En este campo ira información detallada del error cuando corresponda"
+        
+        
   respuesta:
     type: "object"
     properties:

@@ -40,16 +40,6 @@ const createNewProduct = (req, res) => {
 const getAllProducts = (req, res) => {
     let rta;
 
-    /*const {
-        email
-    } = req.body;*/
-
-    /*getEmail(email).then(function (response) {
-        console.log('getEmail response: ' + JSON.stringify(response));
-        if (response.length == 0) {
-            rta = new Response(true, 404, `El usuario: ${email} no esta registrado en el sistema`, "");
-            res.status(404).send(rta);
-        }*/
         console.log("Estoy en el controlador");
         getProducts().then(function (response) {
             //console.log("Ptoducts: " + response);
