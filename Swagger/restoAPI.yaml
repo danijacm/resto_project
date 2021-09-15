@@ -8,8 +8,8 @@ basePath: "/v1"
 tags:
 - name: "User"
   description: "Esta entidad permite la creación y el login de un usuario"
-- name: "Admin"
-  description: "Informacion que puede observar el administrador del sitio"
+- name: "Products"
+  description: "Contiene los endpoints para crear, modificar, consultar y eliminar productos del sistema"
 - name: "Order"
   description: "Informacion de los pedidos"
 - name: "Plates"
@@ -148,30 +148,84 @@ paths:
             $ref: "#/definitions/rta_error"           
           
       
-  /admin:
-    get:
+  /products/create_procuct:
+    post:
       tags:
-      - "Admin"
-      summary: "Consultar pedidos" 
+      - "Products"
+      summary: "Cear un nuevo producto" 
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Permite que un usuario con perfil de administrador pueda crear un nuevo producto en el sistema"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              example: "minombre@gmail.com"
+              description: "Email con el que se quiere regustrar en el sistema"
+            prod_name:
+              type: "string"
+              example: "Tacos Mexicanos"
+              description: "nombre del producto"
+            product_desc: 
+              type: "string"
+              example: "6 tacos de arrachera con pico de gallo"
+              description: "Descripción detallada del producto"
+            price:
+              type: "integer"
+              example: 25000
+              description: "Precio del producto"
+            product_status:
+              type: "integer"
+              example: 1
+              description: "1 = producto disponible, 0 = producto no disponible"
+      
       responses:
         "200":
-          description: "Respuesta exitosa"
+          description: "Producto creado exitosamente"
           schema:
             type: "object"
             properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error en el login"
               status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
                 type: "integer"
-                description: "codigo de estado"
-              data:
-                type: "array"
-                description: "lista de pedidos"
-                items:
-                  $ref: '#/definitions/orderItem'
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Nuevo producto creado exitosamente"
+                description: "mensaje se respuesta"
+              respuesta:
+                  type: "object"
+                  properties:
+                    Producto:
+                      type: "string"
+                      example: "Ronda de ceviches"
+                      description: "Nombre del producto creado"
+                    ID:
+                      type: "integer"
+                      example: 5
+                      description: "ID del producto generado por la BD"
+                  
         "400":
-            description: "no autorizado"
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error" 
+          
+        "409":
+          description: "El usuario no tiene permisos de administrador"
+          schema:
+            $ref: "#/definitions/rta_error"           
+          
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"       
       security:
         - api_key: []
                 

@@ -4,6 +4,38 @@ const {getFieldUserAdmin} = require('../../../model/products');
 const {getOneProduct} = require('../../../model/products');
 
 
+const validateReqNewProd = (req, res, next) => {
+    let rta;
+    let error = false
+
+    const { email, prod_name, product_desc, price, product_status } = req.body;
+    
+    if(email == null || prod_name == null || product_desc == null || price == null || 
+        product_status == null){  
+       
+         error = true;   
+    }
+    else{
+        if(email.length <= 0 || prod_name.length <= 0 || product_desc.length <= 0 ){
+                error = true;
+        }
+        if(product_status < 0 || product_status > 1){
+            error = true;
+        }
+    }
+    if(!error){
+        next();
+    }
+    else{
+        rta = new Response(error, 400, 
+            `Bad request, todos los campo deben venir con datos validos`);
+            res.status(400).send(rta);
+    }
+}
+
+
+
+
 const validateUserAdmin = (req, res, next) => {
     let rta;
     let admin;
@@ -11,9 +43,7 @@ const validateUserAdmin = (req, res, next) => {
     const { email } = req.body;
 
     getFieldUserAdmin(email).then( function (response){
-        //console.log('response: ' + JSON.stringify(response));
         admin = response[0].user_admin;
-        //console.log('Admin: ' + admin);
         if(admin === 1){
             next();
         }
@@ -51,5 +81,6 @@ const validateProductID = (req, res, next) => {
 
 module.exports = {
     validateUserAdmin,
-    validateProductID
+    validateProductID,
+    validateReqNewProd
 };
