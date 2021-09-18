@@ -228,6 +228,115 @@ paths:
             $ref: "#/definitions/rta_error"       
       security:
         - api_key: []
+        
+  /products/get_products:
+    get:
+      tags:
+      - "Products"
+      summary: "Permite obtener el listado de productos" 
+      description: "A través de este endpoint el usuario puede obtener el listado de productos con toda la información detallada"
+      
+      responses:
+        "200":
+          description: "Consulta exitosa"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error en el login"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "COnsulta de productos exitosa"
+                description: "mensaje se respuesta"
+              respuesta:
+                  type: "array"
+                  description: "Listado de productos"
+                  items:
+                    $ref: "#/definitions/product_list" 
+                    
+        "204":
+          description: "No existen productos disponibles"
+                  
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"       
+      security:
+        - api_key: []
+        
+        
+  /products/delete_product:
+    delete:
+      tags:
+      - "Products"
+      summary: "Permite eliminar un producto" 
+      description: "Permite que un usuario con perfil de administrador pueda eliminar un producto del sistema"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              example: "minombre@gmail.com"
+              description: "Email con el que se quiere regustrar en el sistema"
+            product_id:
+              type: "integer"
+              example: 10
+              description: "ID del producto que se quiere eliminar"
+      
+      responses:
+        "200":
+          description: "Borrado exitoso"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Producto borrado exitosamenet"
+                description: "mensaje se respuesta"
+              respuesta:
+                  type: "object"
+                  description: "Nombre del producto borrado"
+                  properties:
+                    producto borrado:
+                      type: "string"
+                      example: "Hamburguesa doble carne"
+                    
+        "409":
+          description: "El usuario no tiene permisos de administrador"
+          schema:
+            $ref: "#/definitions/rta_error"     
+            
+        "404":
+          description: "ID de producto no existe"
+          schema:
+            $ref: "#/definitions/rta_error"             
+                  
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"       
+      security:
+        - api_key: []
+        
+
                 
   /admin/order/{id}:
     get:
@@ -448,27 +557,25 @@ definitions:
         example: 1
         description: "ID generado por la BD automaticamente"
 
-  newUser:
+  product_list:
     type: "object"
     properties:
-      Fullname:
+      product_id:
+        type: "integer"
+        example: 10
+      prod_name: 
         type: "string"
-        description: "nombre y apellidpo del usuario"
-      Email:
+        example: "Hamburguesa doble carne"
+      product_desc:
         type: "string"
-        description: "correo del usuario"
-      Phone:
-        type: "string"
-        description: "telefono del usuario"
-      Address:
-        type: "string"
-        description: "direccion de envio del usuario"
-      Username:
-        type: "string"
-        description: "identificador unico del usuario"
-      Password:
-        type: "string"
-        description: "contraseña del usuario"
+        example: "Hamburguesa doble carne al carbon, viene con cebolla tomate y queso"
+      price:
+        type: "integer"
+        example: 25000
+      product_status:
+        type: "integer"
+        description: "Indica si un producto esta disponible o no. 0 = No disponible, 1 = disponible"
+  
 
   orderItem:
     type: "object"

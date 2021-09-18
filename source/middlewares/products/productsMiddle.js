@@ -64,14 +64,13 @@ const validateProductID = (req, res, next) => {
     const { product_id } = req.body;
     //console.log("product_id = " + product_id);
     getOneProduct(product_id).then( function (response){
-        //console.log('response: ' + JSON.stringify(response));
      
-        if(response.lenght > 0){
+        if(response.length > 0){
             next();
         }
         else{
-            rta = new Response(true, 409, `El ID del producto no existe`, "");
-            res.status(409).send(rta);    
+            rta = new Response(true, 404, `El ID del producto no existe`, "");
+            res.status(404).send(rta);    
         }
      }).catch((error) => {
         rta = new Response(true, 500, "No fue posible crear el usuario", error);

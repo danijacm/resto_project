@@ -44,8 +44,8 @@ const getAllProducts = (req, res) => {
         getProducts().then(function (response) {
             //console.log("Ptoducts: " + response);
             if (response.length === 0) {
-                rta = new Response(false, 404, "No existen productos disponibles", response);
-                res.status(404).send(rta)
+                rta = new Response(false, 204, "No existen productos disponibles", response);
+                res.status(204).send(rta)
             } else {
                 rta = new Response(false, 200, "Consulta de productos exitosa", response);
                 res.status(200).send(rta)
@@ -54,11 +54,6 @@ const getAllProducts = (req, res) => {
             rta = new Response(true, 500, "No fue posible consultar los productos", error);
             res.status(500).send(rta);
         });
-
-    /*}).catch((error) => {
-        rta = new Response(true, 500, "No fue posible crear el usuario", error);
-        res.status(500).send(rta);
-    });*/
 }
 
 
