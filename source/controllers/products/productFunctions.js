@@ -111,7 +111,7 @@ const updateProductData = (req, res) => {
     updateProduct(product_id, arrayProduct).then(function (response) {
         //console.log('Producto: ' + JSON.stringify (response));
 
-        rta = new Response(true, 200, `Producto actualizado exitosamente`, "");
+        rta = new Response(false, 200, `Producto actualizado exitosamente`, "");
         res.status(200).send(rta);
 
     }).catch((error) => {

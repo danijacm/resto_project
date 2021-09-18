@@ -337,6 +337,84 @@ paths:
         - api_key: []
         
 
+  /products/update_product:
+    put:
+      tags:
+      - "Products"
+      summary: "Permite actualizar un producto" 
+      description: "Permite que un usuario con perfil de administrador pueda actualizar un producto del sistema"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              example: "minombre@gmail.com"
+              description: "Email con el que se quiere regustrar en el sistema"
+            product_id:
+              type: "integer"
+              example: 10
+              description: "ID del producto que se quiere eliminar"
+            product_data:
+              type: "object"
+              properties:
+                prod_name:
+                  type: "string"
+                  example: "Hamburguesa Ranchera"
+                product_desc:
+                  type: "string"
+                  example: "Hamburguesa al carbon doble carne"
+                price:
+                  type: "integer"
+                  example: 28000
+                product_status:
+                  type: "integer"
+                  example: 1
+              
+      
+      responses:
+        "200":
+          description: "Actualización exitosa"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Producto actualizado exitosamenet"
+                description: "mensaje se respuesta"
+              respuesta:
+                  type: "object"
+                    
+        "409":
+          description: "El usuario no tiene permisos de administrador"
+          schema:
+            $ref: "#/definitions/rta_error"     
+            
+        "404":
+          description: "ID de producto no existe"
+          schema:
+            $ref: "#/definitions/rta_error"             
+                  
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"       
+      security:
+        - api_key: []
+
+
+
                 
   /admin/order/{id}:
     get:
