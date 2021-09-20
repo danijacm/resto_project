@@ -11,7 +11,7 @@ const {
 } = require('../../../model/orders');
 
 
-function buildOrderResponse(arrayProducts) {
+function buildOrderResponse(arrayProducts, orderID) {
     let totalPrice = 0;
 
     for (let i = 0; i < arrayProducts.length; i++) {
@@ -19,6 +19,7 @@ function buildOrderResponse(arrayProducts) {
     }
     let objOrder = new Object();
     objOrder.listProducts = arrayProducts;
+    objOrder.orderID = orderID;
     objOrder.totalOrder = totalPrice;
     return objOrder;
 }
@@ -50,7 +51,7 @@ const createNewOrder = (req, res) => {
             });
         }
         getTotalOrderValue(order_id).then(function (response) {
-            objOrder = buildOrderResponse(response);
+            objOrder = buildOrderResponse(response, order_id);
             rta = new Response(false, 200, "Tu orden ha sido recibida", objOrder);
             res.status(200).send(rta)
         }).catch((error) => {
@@ -75,7 +76,7 @@ const confirmOrder = (req, res) => {
 
     updateOrder([payment_code, 1, order_id]).then(function (response) {
         //console.log("response = " + response);
-        rta = new Response(false, 200, "Tu orden ha sido confimarda");
+        rta = new Response(false, 200, "Tu orden ha sido confimada");
         res.status(200).send(rta)
 
     }).catch((error) => {

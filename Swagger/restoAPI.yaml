@@ -10,10 +10,8 @@ tags:
   description: "Esta entidad permite la creación y el login de un usuario"
 - name: "Products"
   description: "Contiene los endpoints para crear, modificar, consultar y eliminar productos del sistema"
-- name: "Order"
-  description: "Informacion de los pedidos"
-- name: "Plates"
-  description: "Informacion de los platos"
+- name: "Orders"
+  description: "Contiene los endpoints para la entidad de ordenes"
 schemes:
 - "http"
 
@@ -416,176 +414,109 @@ paths:
 
 
                 
-  /admin/order/{id}:
-    get:
+  /orders/make_order:
+    post:
       tags:
-      - "Admin"
-      summary: "Consultar informacion de pedido" 
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "username de usuario a modificar"
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "Respuesta exitosa"
-          schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
-                $ref: "#/definitions/orderItem"
-                
-        "400":
-          description: "no autorizado"
-      security:
-        - api_key: []
-        
-  /admin/status:
-    put:
-      tags:
-      - "Admin"
-      summary: "actualizar estado del pedido" 
+      - "Orders"
+      summary: "Permite crear una nueva orden"
       parameters:
       - in: "body"
         name: "body"
-        description: 'datos a modificar'
+        description: "Permite a los usuarios registrados crear una nueva orden"
         required: true
         schema:
           type: "object"
           properties:
-            id:
-              type: "integer"
-              description: "id del pedido"
-            status:
-              type: "integer"
-              description: "estado al cual debe ser actulizado"
-      responses:
-        "200":
-          description: "Respuesta exitosa"
-          schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
-                $ref: "#/definitions/orderItem"
-                
-        "400":
-          description: "no autorizado"
-      security:
-        - api_key: []
-  
-  /order/neworder: 
-    post:
-      tags: 
-      - "Order"
-      summary: "Crear nuevo pedido"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "informacion del pedido"
-        required: true
-        schema:
-          $ref: "#/definitions/newOrder"
-      responses:
-        "200":
-          description: "Respuesta exitosa"
-          schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
+            info_order:
+              type: "object"
+              description: "Datos principales de la orden"
+              properties:
+                user_id:
+                  type: "integer"
+                email:
+                  type: "string"
+                  example: "minombre@gmail.com"
+                order_adress:
+                  type: "string"
+                  description: "Dirección a la cual se debe enviar el producto"
+                  example: "Carrera 68D # 24 - 51"
+            order_detail:
+              type: "array"
+              description: "Array que contiene los productos y la cantidad seleccionada por el usuario"
+              items:
                 type: "object"
-                description: "informacion del pedido creado"
                 properties:
-                  id: 
+                  product_id:
                     type: "integer"
-                    description: "id del evento de pedido creado"
-                  number: 
+                    example: 10
+                  quantity:
                     type: "integer"
-                    description: "numero del pedido"
-                  hour:
-                    type: "string"
-                    description: "hora del pedido"
-        "400":
-          description: "no autorizado"
-      security:
-      - api_key: []
-  
-  /order/{id}:
-    get:
-      tags:
-      - "Order"
-      summary: "Consultar informacion de pedido" 
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "username de usuario a modificar"
-        required: true
-        type: "string"
+                    example: 5
+                    
       responses:
         "200":
-          description: "Respuesta exitosa"
+          description: "Orden recibida correctamente"
           schema:
             type: "object"
             properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
               status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
                 type: "integer"
-                description: "codigo de estado"
-              data:
-                $ref: "#/definitions/orderItem"
-                
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Orden recibida correctamente"
+                description: "mensaje se respuesta"
+              respuesta:
+                  type: "object"
+                  properties:
+                    listProducts:
+                      type: "array"
+                      description: "Array de los productos que componen la orden"
+                      items:
+                        type: "object"
+                        properties:
+                          product_id:
+                            type: "integer"
+                            example: 10
+                          prod_name:
+                            type: "string"
+                            example: "Pizaa"
+                          quantity:
+                            type: "integer"
+                            example: 2
+                          price:
+                            type: "integer"
+                            example: 25000
+                    orderID:
+                      type: "integer"
+                      example: 11
+                      description: "ID con el cual se creó la orden en el sistema"
+                    totalOrder:
+                      type: "integer"
+                      example: 95000
+                      description: "Valor total a pagar por la orden"
+                            
         "400":
-          description: "no autorizado"
-      security:
-        - api_key: []
-  
-  /plates:
-    get:
-      tags:
-      - "Plates"
-      summary: "Consultar platos" 
-      responses:
-        "200":
-          description: "Respuesta exitosa"
+          description: "Bad request"
           schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                description: "si fue exitosa o no la peticion"
-              status_code:
-                type: "integer"
-                description: "codigo de estado"
-              data:
-                type: "array"
-                description: "lista de pedidos"
-                items:
-                  $ref: '#/definitions/plateItem'
-        "400":
-            description: "no autorizado"
-      security:
-        - api_key: []
-  
+            $ref: "#/definitions/rta_error"  
+
+        "404":
+          description: "El usuario no existe ó la orden tiene prodctos que no estan disponibles. El campo respuesta sólo trae información cuando la orden lleva productos que no están disponibles, en este campo se especifica el ID del producto o productos no disponibles."
+          schema:
+            $ref: "#/definitions/rta_error"
+        
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"      
+            
+
   
 securityDefinitions:
   api_key:
@@ -655,89 +586,7 @@ definitions:
         description: "Indica si un producto esta disponible o no. 0 = No disponible, 1 = disponible"
   
 
-  orderItem:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        description: "id del pedido"
-      status:
-        type: "string"
-        description: "estado del pedido"
-      hour:
-        type: "string"
-        description: "hora pedido"
-      number:
-        type: "integer"
-        description: "numero del pedido"
-      description:
-        type: "string"
-        description: "detalles del pedido"
-      payment:
-        type: "object"
-        properties:
-          method:
-            type: "string"
-            description: "medio de pago"
-          value:
-            type: "integer"
-            description: "dinero cancelado"
-      fullname:
-        type: "string"
-        description: "nombre y apellidpo del usuario"
-      Phone:
-        type: "string"
-        description: "telefono del usuario"
-      address:
-        type: "string"
-        description: "direccion de envio del usuario"
-  
-  newOrder:
-    type: "object"
-    properties:
-      id_user:
-        type: "integer"
-        description: "id del usuario que ordeno"
-      order:
-        type: "array"
-        description: "lista con los id's de los platos a pedir"
-        items:
-          type: "object"
-          description: "lista con los id's de los platos a pedir"
-          properties: 
-            id_plate:
-              type: "integer"
-              description: "id del plato apedir"
-            quantity:
-              type: "integer"
-              description: "cantidad de platos"
-            
-      payment:
-        type: "object"
-        properties:
-          method:
-            type: "string"
-            description: "id del medio de pago"
-          value:
-            type: "integer"
-            description: "dinero cancelado"
-      address:
-        type: "string"
-        description: "direccion de envio del pedido"
 
-  plateItem:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        description: "id del plato"
-      name: 
-        type: "string"
-        description: "nombre del plato"
-      value:
-        type: "integer"
-        description: "precio del plato"
-        
 
 
     

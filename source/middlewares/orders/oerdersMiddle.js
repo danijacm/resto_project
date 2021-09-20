@@ -96,6 +96,10 @@ const validateOrdeConfrRequest = (req, res, next) => {
         error = true;
     }
 
+    if (payment_code != 2 && payment_code != 3 ) {
+        error = true;
+    }
+
     if (typeof (user_id) != 'number' || typeof (order_id) != 'number' || typeof (payment_code) != 'number') {
         error = true;
     }
