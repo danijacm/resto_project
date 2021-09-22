@@ -517,6 +517,132 @@ paths:
             $ref: "#/definitions/rta_error"      
             
 
+  /orders/confirm_order:
+    put:
+      tags:
+      - "Orders"
+      summary: "Confirma una orden"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Permite a los usuarios confirmar su orden y especificar el medio de pago"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            user_id:
+              type: "integer"
+              example: 2  
+            order_id:
+              type: "integer"
+              description: "ID de la orden que desea confirmar"
+              example: 11
+            payment_code:
+              type: "integer"
+              description: "Especifica el medio de pago deseado. Solo son permitidos dos valores: 1 = Efectivo, 2 = Tarjeta"
+              example: 2
+
+      responses:
+        "200":
+          description: "Orden confirmada correctamente"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Tu orden ha sido confirmada"
+                description: "mensaje se respuesta"
+
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error"  
+
+        "404":
+          description: "Este error puede ocurrir porque tres razones: 1: el usuario no existe, 2: el usuario no tiene una orden pendiente para confirmar, 3: el ID de la orden no existe."
+          schema:
+            $ref: "#/definitions/rta_error"
+        
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"      
+            
+            
+            
+  /orders/update_order_status:
+    put:
+      tags:
+      - "Orders"
+      summary: "Actualiza el estado de una orden"
+      description: "Permite que un usuario con perfil de administrador actualice el estado de una orden"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            user_id:
+              type: "integer"
+              example: 2  
+            order_id:
+              type: "integer"
+              description: "ID de la orden que desea confirmar"
+              example: 11
+            status_id:
+              type: "integer"
+              description: "Valores válidos: 1 = confirmada, 2 = En preparación, 3 = En camino, 4 = Entregada, 4 = Cancelada, 6 = Pendiente"
+              example: 4
+
+      responses:
+        "200":
+          description: "El estado de la orden ha sido actualizado"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "El estado de la orden ha sido actualizado"
+                description: "mensaje se respuesta"
+
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error"  
+            
+        "403":
+          description: "El usuario no tiene privilegios de administrador"
+          schema:
+            $ref: "#/definitions/rta_error"    
+
+        "404":
+          description: "Este error puede ocurrir porque la orden no existe o se está intendo actualizar a un estado que no es válido"
+          schema:
+            $ref: "#/definitions/rta_error"
+        
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"             
+
+
   
 securityDefinitions:
   api_key:

@@ -1,8 +1,11 @@
 const Response = require('../../../classes/response');
-const {getExistProduct} = require('../../../model/products');
 const {
-    getOrder, 
-    getOrderUserId
+    getExistProduct
+} = require('../../../model/products');
+const {
+    getOrder,
+    getOrderUserId,
+    getOrderStatus
 } = require('../../../model/orders');
 
 const validateOrderProducts = async (req, res, next) => {
@@ -96,7 +99,7 @@ const validateOrdeConfrRequest = (req, res, next) => {
         error = true;
     }
 
-    if (payment_code != 2 && payment_code != 3 ) {
+    if (payment_code != 1 && payment_code != 2) {
         error = true;
     }
 
@@ -124,8 +127,7 @@ const validateOrderId = (req, res, next) => {
         if (response.length === 0) {
             rta = new Response(true, 404, "La orden no existe, por favor verifique");
             res.status(404).send(rta);
-        }
-        else{
+        } else {
             next();
         }
     }).catch((error) => {
@@ -141,13 +143,12 @@ const validateOrderUserId = (req, res, next) => {
     const {
         user_id,
     } = req.body;
-   
+
     getOrderUserId(user_id).then(function (response) {
         if (response.length === 0) {
-            rta = new Response(true, 400, "El usuario no tiene una orden pendiente por confirmar");
-            res.status(400).send(rta);
-        }
-        else{
+            rta = new Response(true, 404, "El usuario no existe o no tiene una orden pendiente por confirmar");
+            res.status(404).send(rta);
+        } else {
             next();
         }
     }).catch((error) => {
@@ -157,7 +158,7 @@ const validateOrderUserId = (req, res, next) => {
 }
 
 
-const validateOrderStatus = (req, res) => {
+const validateOrderStatus = (req, res, next) => {
     let rta;
 
     const {
@@ -165,11 +166,10 @@ const validateOrderStatus = (req, res) => {
     } = req.body;
 
     getOrderStatus(status_id).then(function (response) {
-        if(response.length <= 0){
+        if (response.length <= 0) {
             rta = new Response(false, 404, `El campo status_id enviado no es válido`);
             res.status(404).send(rta);
-        }
-        else{
+        } else {
             next();
         }
     }).catch((error) => {
@@ -180,6 +180,35 @@ const validateOrderStatus = (req, res) => {
 }
 
 
+const validateOrderOpdateReq = async (req, res, next) => {
+    let rta;
+    let error = false;
+    let arrayProducts = [];
+
+    const {
+        user_id,
+        order_id,
+        status_id
+    } = req.body;
+
+    if (user_id == null || order_id == null || status_id == null) {
+        error = true;
+    }
+
+    if (typeof (user_id) != 'number' || typeof (order_id) != 'number' || typeof (status_id) != 'number') {
+        error = true;
+    }    
+
+    if (!error) {
+        next();
+    } else {
+        rta = new Response(error, 400, "Bad request, todos los campo deben venir con datos validos", "");
+        res.status(400).send(rta);
+    }
+}
+
+
+
 
 module.exports = {
     validateOrderProducts,
@@ -187,5 +216,6 @@ module.exports = {
     validateOrdeConfrRequest,
     validateOrderId,
     validateOrderUserId,
-    validateOrderStatus
+    validateOrderStatus,
+    validateOrderOpdateReq
 }

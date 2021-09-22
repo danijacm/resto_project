@@ -96,14 +96,16 @@ const changeOrderStatus = (req, res) => {
 
     updateOrderStatus([status_id, order_id]).then(() => {
 
-        getOrderStatus(status_id).then(function (response) {
+        /*getOrderStatus(status_id).then(function (response) {
             rta = new Response(false, 200, "El estado de la orden ha sido actualizado", response[0]);
             res.status(200).send(rta)
 
         }).catch((error) => {
             rta = new Response(true, 500, "No fue posible actualizar el estado de la orden", error);
             res.status(500).send(rta);
-        });
+        });*/
+        rta = new Response(false, 200, "El estado de la orden ha sido actualizado");
+        res.status(200).send(rta)
 
     }).catch((error) => {
         rta = new Response(true, 500, "No fue posible actualizar el estado de la orden", error);

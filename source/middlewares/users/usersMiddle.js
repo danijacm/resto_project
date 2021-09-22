@@ -55,7 +55,6 @@ const validateUserProfile = (req, res, next) => {
 
     getUserProfile(user_id).then( function (response){
         if(response.length > 0){
-            console.log("Rta user_admin: " + response);
             if(response[0].user_admin === 1){
                 next();
             }
@@ -65,8 +64,8 @@ const validateUserProfile = (req, res, next) => {
             }
         }
         else{
-            rta = new Response(true, 409, `El usuario con ID: ${user_id} no esta registrado`);
-            res.status(409).send(rta);    
+            rta = new Response(true, 404, `El usuario con ID: ${user_id} no esta registrado`);
+            res.status(404).send(rta);    
         }
      }).catch((error) => {
         rta = new Response(true, 500, "No fue posible crear el usuario", error);
