@@ -224,8 +224,7 @@ paths:
           description: "Error general del sistema"
           schema:
             $ref: "#/definitions/rta_error"       
-      security:
-        - api_key: []
+
         
   /products/get_products:
     get:
@@ -265,8 +264,7 @@ paths:
           description: "Error general del sistema"
           schema:
             $ref: "#/definitions/rta_error"       
-      security:
-        - api_key: []
+
         
         
   /products/delete_product:
@@ -331,8 +329,6 @@ paths:
           description: "Error general del sistema"
           schema:
             $ref: "#/definitions/rta_error"       
-      security:
-        - api_key: []
         
 
   /products/update_product:
@@ -408,8 +404,7 @@ paths:
           description: "Error general del sistema"
           schema:
             $ref: "#/definitions/rta_error"       
-      security:
-        - api_key: []
+
 
 
 
@@ -643,13 +638,73 @@ paths:
             $ref: "#/definitions/rta_error"             
 
 
+  /orders/cancel_order:
+    put:
+      tags:
+      - "Orders"
+      summary: "Cancela una orden"
+      description: "Permite que un usuario pueda cancelar su orden"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            user_id:
+              type: "integer"
+              example: 2  
+            order_id:
+              type: "integer"
+              description: "ID de la orden que desea confirmar"
+              example: 11
+
+      responses:
+        "200":
+          description: "Orden cancelada correctamente"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Su orden ha sido cancelada"
+                description: "mensaje se respuesta"
+
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error"  
+            
+
+        "404":
+          description: "La orden o el usurio no existen en el sistema"
+          schema:
+            $ref: "#/definitions/rta_error"
+            
+        "409":
+          description: "La orden a cancelar no pertenece al usuario"
+          schema:
+            $ref: "#/definitions/rta_error"            
+        
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"             
   
-securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-  
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
 
     
 definitions:
@@ -662,7 +717,7 @@ definitions:
         description: "True: indica que hubo un error"
       status:
         type: "integer"
-        example: 4XX, 5XX
+        example: 4xx
         description: "Código de respuesta http (4xx - 5xx) generado por el Backend"
       mensaje:
         type: "string"

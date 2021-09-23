@@ -4,8 +4,9 @@ const {
 } = require('../../../model/products');
 const {
     getOrder,
-    getOrderUserId,
-    getOrderStatus
+    getPendOrderByUserId,
+    getOrderStatus,
+    getOrderByUserId
 } = require('../../../model/orders');
 
 const validateOrderProducts = async (req, res, next) => {
@@ -122,7 +123,7 @@ const validateOrderId = (req, res, next) => {
     const {
         order_id,
     } = req.body;
-    //console.log("order_id = " + order_id);
+
     getOrder(order_id).then(function (response) {
         if (response.length === 0) {
             rta = new Response(true, 404, "La orden no existe, por favor verifique");
@@ -144,7 +145,7 @@ const validateOrderUserId = (req, res, next) => {
         user_id,
     } = req.body;
 
-    getOrderUserId(user_id).then(function (response) {
+    getPendOrderByUserId(user_id).then(function (response) {
         if (response.length === 0) {
             rta = new Response(true, 404, "El usuario no existe o no tiene una orden pendiente por confirmar");
             res.status(404).send(rta);
@@ -208,6 +209,54 @@ const validateOrderOpdateReq = async (req, res, next) => {
 }
 
 
+const validateOrdeCanclReq = (req, res, next) => {
+    let rta;
+    let error = false;
+
+    const {
+        user_id,
+        order_id
+    } = req.body;
+
+    if (user_id == null || order_id == null) {
+        error = true;
+    }
+
+    if (typeof (user_id) != 'number' || typeof (order_id) != 'number' ) {
+        error = true;
+    }
+
+    if (!error) {
+        next();
+    } else {
+        rta = new Response(error, 400, "Bad request, todos los campo deben venir con datos validos", "");
+        res.status(400).send(rta);
+    }
+}
+
+
+const validateOrderByUser = (req, res, next) => {
+    let rta;
+
+    const {
+        user_id,
+        order_id
+    } = req.body;
+
+    getOrderByUserId([user_id, order_id]).then(function (response) {
+        if (response.length === 0) {
+            rta = new Response(true, 409, "La orden enviada no pertenece al usuario");
+            res.status(409).send(rta);
+        } else {
+            next();
+        }
+    }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible cancelar su orden", error);
+        res.status(500).send(rta);
+    });
+}
+
+
 
 
 module.exports = {
@@ -217,5 +266,7 @@ module.exports = {
     validateOrderId,
     validateOrderUserId,
     validateOrderStatus,
-    validateOrderOpdateReq
+    validateOrderOpdateReq,
+    validateOrdeCanclReq,
+    validateOrderByUser
 }

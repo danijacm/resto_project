@@ -114,10 +114,7 @@ const changeOrderStatus = (req, res) => {
 }
 
 
-//Middlewares pendientes: 
-// - Validar que la orden exista para el usuario
-// - Que la orden a cancelar se encuentre en un estado válido para cancelación
-// - Validar que el request venga correcto 
+
 const cancelOrder = (req, res) => {
     let rta;
     let cancel_status = 5;

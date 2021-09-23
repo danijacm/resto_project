@@ -1,4 +1,6 @@
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../../Swagger/swagger.json');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const expressJwt = require('express-jwt');
@@ -34,6 +36,7 @@ module.exports = function (app) {
     app.use(helmet());
     app.use(express.static('publica'));
     app.use(express.json());
+    app.use('/deliha-resto-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     app.disable('x-powered-by');
     app.use(express.json({limit: '150kb'}));

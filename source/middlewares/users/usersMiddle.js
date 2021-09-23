@@ -30,10 +30,18 @@ const validatePk = (req, res, next) => {
 
 const validateUser = (req, res, next) => {
     let rta;
+    let id;
+    
+    if (req.body.info_order){
+        const { info_order } = req.body;
+        id = info_order.user_id;
+    }
+    else{
+        const { user_id } = req.body;
+        id = user_id;
+    }   
 
-    const { info_order } = req.body;
-
-    getUserId(info_order.user_id).then( function (response){
+    getUserId(id).then( function (response){  
         if(response.length > 0){
             next();
         }

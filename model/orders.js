@@ -38,10 +38,18 @@ const getOrder = (order_id) => {
     })
 }
 
-const getOrderUserId = (user_id) => {
+const getPendOrderByUserId = (user_id) => {
     return sequelize.query('SELECT user_id FROM orders WHERE user_id = ? and status_id = 6', {
         type: sequelize.QueryTypes.SELECT,
         replacements: [user_id]
+    })
+}
+
+
+const getOrderByUserId = (orderAndUser) => {
+    return sequelize.query('SELECT user_id FROM orders WHERE user_id = ? and order_id = ?', {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: orderAndUser
     })
 }
 
@@ -94,9 +102,10 @@ module.exports = {
     getTotalOrderValue,
     updateOrder,
     getOrder,
-    getOrderUserId,
+    getPendOrderByUserId,
     updateOrderStatus,
     getOrderStatus,
     getOrdersByUser,
-    getOrdStatAndPaymeth
+    getOrdStatAndPaymeth,
+    getOrderByUserId
 };

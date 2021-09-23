@@ -1,0 +1,999 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Esta API permite realizar pedidos online a un restaurante, también brinda la posibilidad a que un usuario con perfil de administrador puda realizar operaciones como agregar, modificar o eliminar productos, cambiar el estado de un pedido entre otras operaciones",
+    "version": "1.0.0",
+    "title": "Delilah Resto API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/v1",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Esta entidad permite la creación y el login de un usuario"
+    },
+    {
+      "name": "Products",
+      "description": "Contiene los endpoints para crear, modificar, consultar y eliminar productos del sistema"
+    },
+    {
+      "name": "Orders",
+      "description": "Contiene los endpoints para la entidad de ordenes"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/user/user_login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Inicio de sesión",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Permite la validación de un usuario en el sistema",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "Email con el cual el usuario se registro en el sistema"
+                },
+                "user_password": {
+                  "type": "string",
+                  "description": "Password asignado por el usuario"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login Exitoso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error en el login"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo HTTP de respuesta"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Usuario logueado exitosamente",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "$ref": "#/definitions/respuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "403": {
+            "description": "Usuario o clave incorrecta",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/user/create_user": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Crear usuario",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Permite crear un nuevo usuario",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "minombre@gmail.com",
+                  "description": "Email con el que se quiere regustrar en el sistema"
+                },
+                "fullname": {
+                  "type": "string",
+                  "example": "Daniel José Jácome",
+                  "description": "Nombre completo del uaurio"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "3015019654",
+                  "description": "Telefono del usuario"
+                },
+                "user_address": {
+                  "type": "string",
+                  "example": "Carrera 27 # 4 - 38",
+                  "description": "Dirección del usuario"
+                },
+                "user_password": {
+                  "type": "string",
+                  "example": "12345",
+                  "description": "Password deseado por el usuario"
+                },
+                "user_admin": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "1 = para usuarios administradores, 0 = para usuarios que no tienen privilegios de administrador"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario creado exitosamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error en el login"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Usuario creado exitosamente",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "$ref": "#/definitions/rta_new_user"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "409": {
+            "description": "Ya existe un usuario registrado con el mismo email",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/products/create_procuct": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Cear un nuevo producto",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Permite que un usuario con perfil de administrador pueda crear un nuevo producto en el sistema",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "minombre@gmail.com",
+                  "description": "Email con el que se quiere regustrar en el sistema"
+                },
+                "prod_name": {
+                  "type": "string",
+                  "example": "Tacos Mexicanos",
+                  "description": "nombre del producto"
+                },
+                "product_desc": {
+                  "type": "string",
+                  "example": "6 tacos de arrachera con pico de gallo",
+                  "description": "Descripción detallada del producto"
+                },
+                "price": {
+                  "type": "integer",
+                  "example": 25000,
+                  "description": "Precio del producto"
+                },
+                "product_status": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "1 = producto disponible, 0 = producto no disponible"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto creado exitosamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error en el login"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Nuevo producto creado exitosamente",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "type": "object",
+                  "properties": {
+                    "Producto": {
+                      "type": "string",
+                      "example": "Ronda de ceviches",
+                      "description": "Nombre del producto creado"
+                    },
+                    "ID": {
+                      "type": "integer",
+                      "example": 5,
+                      "description": "ID del producto generado por la BD"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "409": {
+            "description": "El usuario no tiene permisos de administrador",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/products/get_products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Permite obtener el listado de productos",
+        "description": "A través de este endpoint el usuario puede obtener el listado de productos con toda la información detallada",
+        "responses": {
+          "200": {
+            "description": "Consulta exitosa",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error en el login"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "COnsulta de productos exitosa",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "type": "array",
+                  "description": "Listado de productos",
+                  "items": {
+                    "$ref": "#/definitions/product_list"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No existen productos disponibles"
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/products/delete_product": {
+      "delete": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Permite eliminar un producto",
+        "description": "Permite que un usuario con perfil de administrador pueda eliminar un producto del sistema",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "minombre@gmail.com",
+                  "description": "Email con el que se quiere regustrar en el sistema"
+                },
+                "product_id": {
+                  "type": "integer",
+                  "example": 10,
+                  "description": "ID del producto que se quiere eliminar"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Borrado exitoso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Producto borrado exitosamenet",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "type": "object",
+                  "description": "Nombre del producto borrado",
+                  "properties": {
+                    "producto borrado": {
+                      "type": "string",
+                      "example": "Hamburguesa doble carne"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ID de producto no existe",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "409": {
+            "description": "El usuario no tiene permisos de administrador",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/products/update_product": {
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Permite actualizar un producto",
+        "description": "Permite que un usuario con perfil de administrador pueda actualizar un producto del sistema",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "minombre@gmail.com",
+                  "description": "Email con el que se quiere regustrar en el sistema"
+                },
+                "product_id": {
+                  "type": "integer",
+                  "example": 10,
+                  "description": "ID del producto que se quiere eliminar"
+                },
+                "product_data": {
+                  "type": "object",
+                  "properties": {
+                    "prod_name": {
+                      "type": "string",
+                      "example": "Hamburguesa Ranchera"
+                    },
+                    "product_desc": {
+                      "type": "string",
+                      "example": "Hamburguesa al carbon doble carne"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "example": 28000
+                    },
+                    "product_status": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Producto actualizado exitosamenet",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ID de producto no existe",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "409": {
+            "description": "El usuario no tiene permisos de administrador",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/make_order": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Permite crear una nueva orden",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Permite a los usuarios registrados crear una nueva orden",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "info_order": {
+                  "type": "object",
+                  "description": "Datos principales de la orden",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "minombre@gmail.com"
+                    },
+                    "order_adress": {
+                      "type": "string",
+                      "description": "Dirección a la cual se debe enviar el producto",
+                      "example": "Carrera 68D # 24 - 51"
+                    }
+                  }
+                },
+                "order_detail": {
+                  "type": "array",
+                  "description": "Array que contiene los productos y la cantidad seleccionada por el usuario",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product_id": {
+                        "type": "integer",
+                        "example": 10
+                      },
+                      "quantity": {
+                        "type": "integer",
+                        "example": 5
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orden recibida correctamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Orden recibida correctamente",
+                  "description": "mensaje se respuesta"
+                },
+                "respuesta": {
+                  "type": "object",
+                  "properties": {
+                    "listProducts": {
+                      "type": "array",
+                      "description": "Array de los productos que componen la orden",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "product_id": {
+                            "type": "integer",
+                            "example": 10
+                          },
+                          "prod_name": {
+                            "type": "string",
+                            "example": "Pizaa"
+                          },
+                          "quantity": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "price": {
+                            "type": "integer",
+                            "example": 25000
+                          }
+                        }
+                      }
+                    },
+                    "orderID": {
+                      "type": "integer",
+                      "example": 11,
+                      "description": "ID con el cual se creó la orden en el sistema"
+                    },
+                    "totalOrder": {
+                      "type": "integer",
+                      "example": 95000,
+                      "description": "Valor total a pagar por la orden"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "404": {
+            "description": "El usuario no existe ó la orden tiene prodctos que no estan disponibles. El campo respuesta sólo trae información cuando la orden lleva productos que no están disponibles, en este campo se especifica el ID del producto o productos no disponibles.",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/confirm_order": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Confirma una orden",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Permite a los usuarios confirmar su orden y especificar el medio de pago",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "order_id": {
+                  "type": "integer",
+                  "description": "ID de la orden que desea confirmar",
+                  "example": 11
+                },
+                "payment_code": {
+                  "type": "integer",
+                  "description": "Especifica el medio de pago deseado. Solo son permitidos dos valores: 1 = Efectivo, 2 = Tarjeta",
+                  "example": 2
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orden confirmada correctamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Tu orden ha sido confirmada",
+                  "description": "mensaje se respuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "404": {
+            "description": "Este error puede ocurrir porque tres razones: 1: el usuario no existe, 2: el usuario no tiene una orden pendiente para confirmar, 3: el ID de la orden no existe.",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/update_order_status": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Actualiza el estado de una orden",
+        "description": "Permite que un usuario con perfil de administrador actualice el estado de una orden",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "order_id": {
+                  "type": "integer",
+                  "description": "ID de la orden que desea confirmar",
+                  "example": 11
+                },
+                "status_id": {
+                  "type": "integer",
+                  "description": "Valores válidos: 1 = confirmada, 2 = En preparación, 3 = En camino, 4 = Entregada, 4 = Cancelada, 6 = Pendiente",
+                  "example": 4
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "El estado de la orden ha sido actualizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "El estado de la orden ha sido actualizado",
+                  "description": "mensaje se respuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "403": {
+            "description": "El usuario no tiene privilegios de administrador",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "404": {
+            "description": "Este error puede ocurrir porque la orden no existe o se está intendo actualizar a un estado que no es válido",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    },
+    "/orders/cancel_order": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Cancela una orden",
+        "description": "Permite que un usuario pueda cancelar su orden",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "order_id": {
+                  "type": "integer",
+                  "description": "ID de la orden que desea confirmar",
+                  "example": 11
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orden cancelada correctamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "False: No hubo error"
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 200,
+                  "description": "Codigo de respuesta HTTP"
+                },
+                "mensaje": {
+                  "type": "string",
+                  "example": "Su orden ha sido cancelada",
+                  "description": "mensaje se respuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "404": {
+            "description": "La orden o el usurio no existen en el sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "409": {
+            "description": "La orden a cancelar no pertenece al usuario",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          },
+          "500": {
+            "description": "Error general del sistema",
+            "schema": {
+              "$ref": "#/definitions/rta_error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "definitions": {
+    "rta_error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "boolean",
+          "example": true,
+          "description": "True: indica que hubo un error"
+        },
+        "status": {
+          "type": "integer",
+          "example": "4xx",
+          "description": "Código de respuesta http (4xx - 5xx) generado por el Backend"
+        },
+        "mensaje": {
+          "type": "string",
+          "description": "Mensaje que especifica el tipo de error"
+        },
+        "respuesta": {
+          "type": "object",
+          "description": "En este campo ira información detallada del error cuando corresponda"
+        }
+      }
+    },
+    "respuesta": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "example": 1,
+          "description": "ID generado por la BD automaticamente"
+        },
+        "Token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbC...",
+          "description": "Token único generado por el sistema para el usuario (Timeout = 1h)"
+        }
+      }
+    },
+    "rta_new_user": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "example": 1,
+          "description": "ID generado por la BD automaticamente"
+        }
+      }
+    },
+    "product_list": {
+      "type": "object",
+      "properties": {
+        "product_id": {
+          "type": "integer",
+          "example": 10
+        },
+        "prod_name": {
+          "type": "string",
+          "example": "Hamburguesa doble carne"
+        },
+        "product_desc": {
+          "type": "string",
+          "example": "Hamburguesa doble carne al carbon, viene con cebolla tomate y queso"
+        },
+        "price": {
+          "type": "integer",
+          "example": 25000
+        },
+        "product_status": {
+          "type": "integer",
+          "description": "Indica si un producto esta disponible o no. 0 = No disponible, 1 = disponible"
+        }
+      }
+    }
+  }
+}
