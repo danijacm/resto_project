@@ -3,7 +3,7 @@
   "info": {
     "description": "Esta API permite realizar pedidos online a un restaurante, también brinda la posibilidad a que un usuario con perfil de administrador puda realizar operaciones como agregar, modificar o eliminar productos, cambiar el estado de un pedido entre otras operaciones",
     "version": "1.0.0",
-    "title": "Delilah Resto API"
+    "title": "Deliah Resto API"
   },
   "host": "localhost:3000",
   "basePath": "/v1",
@@ -912,13 +912,6 @@
           }
         }
       }
-    }
-  },
-  "securitySchemes": {
-    "bearerAuth": {
-      "type": "http",
-      "scheme": "bearer",
-      "bearerFormat": "JWT"
     }
   },
   "definitions": {
