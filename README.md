@@ -1,6 +1,11 @@
 # resto_project
 
-Aca debe ir la descripción de la funcionalidad de la API
+Este es el tercer proyecto del curso de desarrollo web Full Stack de Acamica. Se trata de una API desarrollada con Node JS. Dicha API brida servicios para que un restaurante o negocio de comidas pueda recibir pedidos de sus clientes que podteriormente serán entregados a domicilio. La APi también brinda algunos servicios de administración a los cuales sólo tienen acceso los usuarios con perfil de administrador.   
+
+## Documentación de la API
+ La documentación de cada uno de los servicios de la API se encuentra en el siguiente link:
+ http://localhost:3000/deliha-resto-api-docs/
+
 
 ## Diagrama Entidad Relación
 
@@ -13,9 +18,6 @@ Referencio los archivos que contienen los scrpts de cración e inserción de dat
 ## Diagrama de secuescia
 
 Acá explico mediante un diagrama de secuencia, como es que un usuario puede realizar un pedido
-
-## Documentación de la API
- Aca debe ir el endpoint que lleva a la documantación en Swagger
  
 ## Colección en POSTMAN
 acá debe ir la dirección de mi colección de POSTMAN
