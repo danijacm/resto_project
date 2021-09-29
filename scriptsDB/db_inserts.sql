@@ -13,6 +13,3 @@ INSERT INTO order_status (status_desc)VALUES
 ('En camino'),
 ('Entregada'),
 ('Cancelada');
-
-INSERT INTO orders (email, payment_code, order_address, status_id)VALUES 
-('gustavocarrena@gmail.com',3,'Belgrano 3629',6);

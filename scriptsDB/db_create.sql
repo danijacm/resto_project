@@ -63,32 +63,3 @@ CREATE TABLE orders (
 
 
 
-
-u.fullname, u.email, u.phone -- Tabla usuario
-o.order_address, -- Tabla Order
-pm.payment_desc -- Tabla payment_methods
-os.status_desc -- Order_status
-op.quantity -- Tabla Order_products
-p.prod_name, p.price -- Tabla Products
-
-
-
---Extrae los datos del usaario y el código de estado de la orden y el código de pago
-select u.fullname, o.order_address, o.order_id, o.status_id, o.payment_code from users u
-join orders o on (u.user_id = o.user_id) where u.user_id = 2 and o.status_id != 4 and o.status_id != 5;
-
--- Extrae el estado de la ordern y la forma de pago seleccionada por el usuario
-select o.status_id, o.payment_code, os.status_desc, pm.payment_desc 
-from orders o
-join order_status os 
-on (o.status_id = os.status_id)
-join payment_methods pm 
-on (o.payment_code = pm.payment_code) where o.status_id = 3 and o.payment_code = 2; 
-
-
-select op.quantity, p.prod_name, p.price 
-from order_products op
-join products p
-on (op.product_id = p.product_id) 
-
-
