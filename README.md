@@ -22,6 +22,6 @@ Link: https://github.com/danijacm/resto_project/tree/main/scriptsDB
 Acá explico mediante un diagrama de secuencia, como es que un usuario puede realizar un pedido
  
 ## Colección en POSTMAN
-acá debe ir la dirección de mi colección de POSTMAN
+La colección de postman que contiene los request para probar cada uno de los endpoints se encuentra en la carpeta postman_collection del proyecto.
+Link: https://github.com/danijacm/resto_project/tree/main/postman_callection
 
-### Subtitulo ejemplo
