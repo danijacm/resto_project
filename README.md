@@ -9,7 +9,8 @@ Este es el tercer proyecto del curso de desarrollo web Full Stack de Acamica. Se
 
 ## Diagrama Entidad Relación de la Base de datos
 
-![pedidos_bd - Diagrama ER de base de datos (pata de gallo)](https://user-images.githubusercontent.com/4483365/135361984-7a01808a-9969-4c71-a37b-8b2d59fd5365.png)
+![pedidos_bd - Diagrama ER de base de datos (pata de gallo) (1)](https://user-images.githubusercontent.com/4483365/135362764-09e7809c-bd3e-462b-918a-98b454e29801.png)
+
 
 ## Scripts de la base de datos
 
