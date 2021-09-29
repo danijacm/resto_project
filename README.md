@@ -14,7 +14,8 @@ Este es el tercer proyecto del curso de desarrollo web Full Stack de Acamica. Se
 
 ## Scripts de la base de datos
 
-Referencio los archivos que contienen los scrpts de cración e inserción de datos en la BD
+Los scripts para la creación de la base de datos y la inserción de datos en algunas tablas se encuentran dentro de la carpeta scriptsDB del proyecto
+Link: https://github.com/danijacm/resto_project/tree/main/scriptsDB
 
 ## Diagrama de secuescia
 
