@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "7c978b56-61d4-4f27-a4a0-528a223986b4",
+		"name": "Deliah Resto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "update_product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZGphY29tZW1AZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0NSIsImlhdCI6MTYyOTY3MzE1MiwiZXhwIjoxNjI5Njc2NzUyfQ.Hhx3yQLdMHa51OFJrcNxLp5QtmqiuLg4KdjWDZSrQI4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"djacomem@gmail.com\",\r\n    \"product_id\": 20,\r\n    \"product_data\":\r\n    {\r\n        \"prod_name\": \"Hamburguesa\", \r\n        \"product_desc\": \"Hamburguesa Doble carne\",\r\n        \"price\": 55000,\r\n        \"product_status\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/products/update_product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"update_product"
+							]
+						},
+						"description": "Request para actualizar un producto en el sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "delete_product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZGphY29tZW1AZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0NSIsImlhdCI6MTYzMTkxNzA2NywiZXhwIjoxNjMxOTIwNjY3fQ.C1i8U2HGpJAyxp_XRyqn5sNYHhiQdZictAxi5PEWfqs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"djacomem@gmail.com\",\r\n    \"product_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/products/delete_product",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"delete_product"
+							]
+						},
+						"description": "Request para eliminar un producto del sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "create_procuct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"djacomem@gmail.com\",\r\n    \"prod_name\": \"producto ejempo\", \r\n    \"product_desc\": \"Deliciosa picada trifasica para compartir (carne, cerdo y pollo)\",\r\n    \"price\": 55000,\r\n    \"product_status\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/products/create_procuct",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"create_procuct"
+							]
+						},
+						"description": "Equest para crear un nuevo producto en el sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "get_all_products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZGphY29tZW1AZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0NSIsImlhdCI6MTYzMjA5MzM5MiwiZXhwIjoxNjMyMDk2OTkyfQ.EL2p4ahCQcKTIoe7N9YASRE3SnRw3J23rg1aWgSnZLE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/products/get_products",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"products",
+								"get_products"
+							]
+						},
+						"description": "Request para cargar todos los productos"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "user_login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"email\": \"milena_rodriguez@gmail.com\",\r\n \"user_password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/user_login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"user_login"
+							]
+						},
+						"description": "Request para que un usuario haga login en el sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "create_user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiY2FybG9zQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE2MzAwMTgwMzAsImV4cCI6MTYzMDAyMTYzMH0.5t9i7RAQOZTF9XKvuvL6575PXqcqxRDQghJnlVZ_OBM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"email\": \"djacomem@gmail.com\",\r\n \"fullname\": \"Carlos Parra Martinez\",\r\n \"phone\": \"3156543456\",\r\n \"user_address\": \"Autopista norte # 45 -26\",\r\n \"user_password\": \"12345\",\r\n \"user_admin\": 0\r\n}\r\n\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/user/create_user",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"create_user"
+							]
+						},
+						"description": "request para crear un nuevo usuario"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "make_order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoibWlsZW5hX3JvZHJpZ3VlekBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiaWF0IjoxNjMyMTc0MjkyLCJleHAiOjE2MzIxNzc4OTJ9.pmrDaf0k2edH0-Mxu0110G0Ts78gFDLlNYTdNxPIfiE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"info_order\":\r\n    {\r\n    \"user_id\": 2,    \r\n    \"email\": \"milena_rodriguez@gmail.com\",\r\n    \"address\": \"Calle 4 # 15 - 28\"\r\n    },\r\n    \"order_detail\":[\r\n    {\r\n        \"product_id\": 1,\r\n        \"quantity\": 2\r\n    },\r\n    {\r\n        \"product_id\": 2,\r\n        \"quantity\": 1\r\n    }\r\n    ]\r\n}\r\n    \r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders/make_order",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"make_order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm_order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoibWlsZW5hX3JvZHJpZ3VlekBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiaWF0IjoxNjMyMzQ0Mzg2LCJleHAiOjE2MzIzNDc5ODZ9.A3SCD7Hl6SOYyfvAbGFCpr6lUFnVSLciSdNLy_z5fpA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"user_id\": 2,\r\n \"order_id\": 3,\r\n \"payment_code\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders/confirm_order",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"confirm_order"
+							]
+						},
+						"description": "Request para confirmar una orden que está en estado pendiente"
+					},
+					"response": []
+				},
+				{
+					"name": "update_order_status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoibWlsZW5hX3JvZHJpZ3VlekBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiaWF0IjoxNjMyMzQ0Mzg2LCJleHAiOjE2MzIzNDc5ODZ9.A3SCD7Hl6SOYyfvAbGFCpr6lUFnVSLciSdNLy_z5fpA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"user_id\": 4,\r\n \"order_id\": 3,\r\n \"status_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders/update_order_status",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"update_order_status"
+							]
+						},
+						"description": "Request para que un usuario con perfil de administrador pueda actualizar el estado de una orden"
+					},
+					"response": []
+				},
+				{
+					"name": "cancel_order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoibWlsZW5hX3JvZHJpZ3VlekBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiaWF0IjoxNjMwNDUzNTkyLCJleHAiOjE2MzA0NTcxOTJ9.IgXh6yYYhGo3wdkgw5uB1vPHKCrO9QeiSyhSD3217gk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"user_id\": 2,\r\n \"order_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders/cancel_order",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"cancel_order"
+							]
+						},
+						"description": "Request para realizar la cancelación de una orden"
+					},
+					"response": []
+				},
+				{
+					"name": "get_orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiY2FwYW1hQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiMTIzNDUiLCJpYXQiOjE2MzI4NjcxOTgsImV4cCI6MTYzMjg3MDc5OH0.dZK4jeoo1iD6lITHE5BJCtIZf0S-ug1kb1FgKvSw35I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/orders/get_orders/?user_id=55",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"get_orders",
+								""
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "55"
+								},
+								{
+									"key": "email",
+									"value": "djacomem@gmail.com",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Request para cargar todas las ordenes (diferente a entregadas o canceladas) pertenecientes a un usuario  "
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
