@@ -56,6 +56,26 @@ const validateUser = (req, res, next) => {
 }
 
 
+const validateUserID = (req, res, next) => {
+    
+    const {user_id} = req.query;
+    //const user_id = req.params.user_id;
+
+    getUserId(user_id).then( function (response){  
+        if(response.length > 0){
+            next();
+        }
+        else{
+            rta = new Response(true, 404, `El usuario no esta registrado`, "");
+            res.status(404).send(rta);    
+        }
+     }).catch((error) => {
+        rta = new Response(true, 500, "No fue posible crear el usuario", error);
+        res.status(500).send(rta);
+    });      
+}
+
+
 const validateUserProfile = (req, res, next) => {
     let rta;
 
@@ -149,5 +169,6 @@ module.exports = {
     validatePk,
     validateRequestLogin,
     validateUser,
-    validateUserProfile
+    validateUserProfile,
+    validateUserID
 };

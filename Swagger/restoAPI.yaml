@@ -2,9 +2,10 @@ swagger: "2.0"
 info:
   description: "Esta API permite realizar pedidos online a un restaurante, también brinda la posibilidad a que un usuario con perfil de administrador puda realizar operaciones como agregar, modificar o eliminar productos, cambiar el estado de un pedido entre otras operaciones"
   version: "1.0.0"
-  title: "Delilah Resto API"
+  title: "Deliah Resto API"
 host: "localhost:3000"  
 basePath: "/v1"
+ 
 tags:
 - name: "User"
   description: "Esta entidad permite la creación y el login de un usuario"
@@ -214,6 +215,9 @@ paths:
           description: "Bad request"
           schema:
             $ref: "#/definitions/rta_error" 
+        
+        "401":
+          description: "No se encontró un token autorizado"
           
         "409":
           description: "El usuario no tiene permisos de administrador"
@@ -314,6 +318,9 @@ paths:
                     producto borrado:
                       type: "string"
                       example: "Hamburguesa doble carne"
+                      
+        "401":
+          description: "No se encontró un token autorizado"              
                     
         "409":
           description: "El usuario no tiene permisos de administrador"
@@ -389,6 +396,9 @@ paths:
                 description: "mensaje se respuesta"
               respuesta:
                   type: "object"
+                  
+        "401":
+          description: "No se encontró un token autorizado"                        
                     
         "409":
           description: "El usuario no tiene permisos de administrador"
@@ -500,6 +510,9 @@ paths:
           description: "Bad request"
           schema:
             $ref: "#/definitions/rta_error"  
+            
+        "401":
+          description: "No se encontró un token autorizado"                  
 
         "404":
           description: "El usuario no existe ó la orden tiene prodctos que no estan disponibles. El campo respuesta sólo trae información cuando la orden lleva productos que no están disponibles, en este campo se especifica el ID del producto o productos no disponibles."
@@ -560,6 +573,9 @@ paths:
           description: "Bad request"
           schema:
             $ref: "#/definitions/rta_error"  
+            
+        "401":
+          description: "No se encontró un token autorizado"                  
 
         "404":
           description: "Este error puede ocurrir porque tres razones: 1: el usuario no existe, 2: el usuario no tiene una orden pendiente para confirmar, 3: el ID de la orden no existe."
@@ -622,6 +638,9 @@ paths:
           schema:
             $ref: "#/definitions/rta_error"  
             
+        "401":
+          description: "No se encontró un token autorizado"                  
+            
         "403":
           description: "El usuario no tiene privilegios de administrador"
           schema:
@@ -683,6 +702,8 @@ paths:
           schema:
             $ref: "#/definitions/rta_error"  
             
+        "401":
+          description: "No se encontró un token autorizado"      
 
         "404":
           description: "La orden o el usurio no existen en el sistema"
@@ -700,11 +721,62 @@ paths:
             $ref: "#/definitions/rta_error"             
   
 
-securitySchemes:
-  bearerAuth:
-    type: http
-    scheme: bearer
-    bearerFormat: JWT
+  /orders/get_orders/{user_id}:
+    get:
+      tags:
+      - "Orders"
+      summary: "Consultar ordenes"
+      description: "Permite que un usuario pueda consultar todas las ordenes que no han sido entregadas y se encuentran activas"
+      parameters:
+      - in: path
+        name: "user_id"
+        description: "ID del usuario creado por la BD"
+        required: true
+        type: "integer"
+
+
+
+      responses:
+        "200":
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              error: 
+                type: "boolean"
+                example: false
+                description: "False: No hubo error"
+              status:
+                type: "integer"
+                example: 200
+                description: "Codigo de respuesta HTTP"
+              mensaje:
+                type: "string"
+                example: "Las ordenes encontradas para Carlos Parra son:"
+                description: "mensaje se respuesta"
+              respuesta:
+                type: "array"
+                description: "Detalle de las ordenes encontradas"
+                items:
+                  $ref: "#/definitions/order_header"
+
+        "400":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/rta_error"  
+            
+        "401":
+          description: "No se encontró un token autorizado"                  
+
+        "404":
+          description: "El usuario no se encuentra registrado"
+          schema:
+            $ref: "#/definitions/rta_error"
+            
+        "500":
+          description: "Error general del sistema"
+          schema:
+            $ref: "#/definitions/rta_error"             
 
     
 definitions:
@@ -765,7 +837,49 @@ definitions:
       product_status:
         type: "integer"
         description: "Indica si un producto esta disponible o no. 0 = No disponible, 1 = disponible"
-  
+        
+  order_header:
+    type: "object"
+    properties:
+      order_id:
+        type: "integer"
+        example: 10
+      order_address: 
+        type: "string"
+        example: "Calle 26 # 68B - 50 Torre 1 apto 502"
+      order_status:
+        type: "string"
+        example: "Confirmada"
+      payment_meth:
+        type: "string"
+        example: "Efectivo"
+      listProducts:
+        type: "array"
+        description: "Lista detallada de los productos que componen la orden"
+        items:
+          $ref: "#/definitions/order_product"
+      totalOrder:
+        type: "integer"
+        description: "Valor total de la orden"
+        example: 105000
+
+
+  order_product:
+    type: "object"
+    properties:
+      product_id:
+        type: "integer"
+        example: 10
+      prod_name: 
+        type: "string"
+        example: "Hamburguesa doble carne"
+      quantity:
+        type: "integer"
+        example: 2
+      price:
+        type: "integer"
+        example: 25000
+
 
 
 

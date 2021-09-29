@@ -95,15 +95,6 @@ const changeOrderStatus = (req, res) => {
     } = req.body;
 
     updateOrderStatus([status_id, order_id]).then(() => {
-
-        /*getOrderStatus(status_id).then(function (response) {
-            rta = new Response(false, 200, "El estado de la orden ha sido actualizado", response[0]);
-            res.status(200).send(rta)
-
-        }).catch((error) => {
-            rta = new Response(true, 500, "No fue posible actualizar el estado de la orden", error);
-            res.status(500).send(rta);
-        });*/
         rta = new Response(false, 200, "El estado de la orden ha sido actualizado");
         res.status(200).send(rta)
 
@@ -138,15 +129,17 @@ const cancelOrder = (req, res) => {
 const getInfOrdersByUser = async (req, res) => {
     let rta;
     let arrayOrders = [];
-    const {
-        user_id,
-    } = req.body;
+
+    const {user_id} = req.query;
+    //const user_id = req.params.user_id;
+    //console.log("query = " + JSON.stringify(req.query));
+    //console.log("params = " + JSON.stringify(req.params));
+
 
     try {
         const response = await getOrdersByUser(user_id);
         for (let i = 0; i < response.length; i++) {
             try {
-                //const response2 = await getOrdStatAndPaymeth([response[i]['status_id'], response[i]['payment_code']]);
                 const response2 = await getOrdStatAndPaymeth([response[i].status_id, response[i].payment_code]);
                 let objOrder = new Object();
                 objOrder.order_id = response[i].order_id;
